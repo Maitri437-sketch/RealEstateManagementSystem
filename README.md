@@ -127,7 +127,7 @@ Run the Project:
 Press F5 or click IIS Express / Start to launch the site locally.
 
 📄 License
-This project is developed for educational purposes under the B.Tech Computer Engineering Curriculum.
+This project is developed for educational purposes under the B.Tech Computer Engineering Curriculum. 
 
 🌐 Live Application URL
 🚀 Live Demo: Updated here.
