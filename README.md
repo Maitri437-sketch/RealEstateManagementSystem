@@ -1,137 +1,244 @@
 # 🏢 Real Estate Management System
 
-A comprehensive, full-stack web application developed using **ASP.NET Core MVC** and **SQL Server 2022** to streamline property management, buyer inquiries, and real estate listings.
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-8.0-blue)
+![C#](https://img.shields.io/badge/C%23-Latest-purple)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-red)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-blueviolet)
+![License](https://img.shields.io/badge/License-Educational-green)
+
+A modern **Real Estate Management System** developed using **ASP.NET Core MVC**, **Entity Framework Core**, and **SQL Server 2022**. The system simplifies property listing, management, customer inquiries, and administrative operations through a secure and user-friendly web interface.
 
 ---
 
-## 📋 Course Project Information
-* **Course:** .NET TECHNOLOGIES – 01CE15230 (B.Tech Semester 5)
-* **Component:** Continuous Semester Evaluation (CSE) Mini Project
-* **Technology Stack:** C#, ASP.NET Core MVC, Entity Framework Core, SQL Server 2022
+# 📚 Course Information
+
+- **Course:** .NET Technologies (01CE15230)
+- **Semester:** B.Tech Semester 5
+- **Project Type:** Continuous Semester Evaluation (Mini Project)
+- **Framework:** ASP.NET Core MVC
+- **Language:** C#
+- **Database:** SQL Server 2022
 
 ---
 
-## 📸 Application Overview & Key Modules
+# 📸 Project Modules
 
 | Module | Description |
-| :--- | :--- |
-| 🔐 **Authentication & Authorization** | Secure Login and Registration with Role-Based Access Control (Admin / Customer). |
-| 📊 **Admin Dashboard** | Real-time system analytics — Total Properties, Available Properties, Inquiries Count, and Users. |
-| 🏡 **Property Management** | Full CRUD operations (Add, Edit, View, Delete) for property listings with image uploads. |
-| 🔍 **Property Search & Filter** | Dynamic search by Property Type (Flat, House, Land), Price Range, and Location. |
-| 📑 **Inquiry System** | Customers can send direct purchase/rental inquiries to administrators. |
+|---------|-------------|
+| 🔐 Authentication | User Registration, Login and Role-Based Authorization |
+| 👨‍💼 Admin Dashboard | View total users, properties, available listings and inquiries |
+| 🏡 Property Management | Add, Update, Delete and View Property Listings |
+| 🔍 Property Search | Search properties by Type, Price and Location |
+| 📩 Inquiry Management | Customers can send property inquiries to Admin |
+| 🖼 Image Upload | Upload and display property images |
+| 📱 Responsive Design | Mobile-friendly interface using Bootstrap 5 |
 
 ---
 
-## ✨ Features
-* ✅ **Clean Architecture:** Built using the MVC (Model-View-Controller) design pattern.
-* ✅ **Entity Framework Core ORM:** Code-First approach for managing SQL Server database operations.
-* ✅ **Responsive Design:** User-friendly UI built with Bootstrap 5 for seamless desktop and mobile view.
-* ✅ **Security:** Input validation, anti-forgery tokens, and password protection.
-* ✅ **Free Live Deployment:** Hosted online for real-time remote evaluation and public usage.
+# ✨ Features
+
+- Secure Login & Registration
+- Role-Based Authentication (Admin & Customer)
+- Property CRUD Operations
+- Property Image Upload
+- Property Search & Filters
+- Customer Inquiry System
+- Admin Dashboard
+- SQL Server Database
+- Entity Framework Core (Code First)
+- Responsive Bootstrap UI
+- MVC Architecture
+- Form Validation
+- Anti-Forgery Protection
 
 ---
 
-## 🛠️ Technology Stack
+# 🛠 Technology Stack
 
-| Category | Technology | Version | Description |
-| :--- | :--- | :--- | :--- |
-| **Backend Framework** | ASP.NET Core MVC | 8.0 | Web Application Framework & Request Pipeline |
-| **Programming Language** | C# | Latest | Core Business Logic & Controller Implementation |
-| **Database** | Microsoft SQL Server | 2022 | Relational Database Management System (RDBMS) |
-| **ORM Tool** | Entity Framework Core | 8.0 | Database Access & Code-First Migrations |
-| **Frontend Framework** | Bootstrap | 5.3 | Responsive UI Layout & Styling |
-| **Client Interface** | HTML5 / CSS3 / JavaScript | Standard | Modern Web Interfaces & Dynamic Client Interactivity |
-| **Version Control** | Git & GitHub | Latest | Code Management & Collaboration |
-
----
-
-## 👥 Team Members
-
-| Name | Enrollment No. |
-| :--- | :--- |
-| **[Maitri Adroja]** | [92400103446] |
-| **[Krupa Makwana]** | [92400103408] |
-| **[Manthan Makwana]** | [92400103407] |
+| Technology | Version |
+|------------|---------|
+| ASP.NET Core MVC | 8.0 |
+| C# | Latest |
+| Entity Framework Core | 8.0 |
+| SQL Server | 2022 |
+| Bootstrap | 5.3 |
+| HTML5 | Latest |
+| CSS3 | Latest |
+| JavaScript | ES6 |
+| Git & GitHub | Latest |
 
 ---
 
-## 🏗️ Project Directory Structure
+# 📂 Project Structure
 
 ```text
-RealEstateManagementSystem/
+RealEstateManagementSystem
 │
-├── 📁 Controllers/          → Handles incoming HTTP requests and application logic
+├── Controllers
 │   ├── HomeController.cs
 │   ├── AccountController.cs
 │   └── PropertyController.cs
 │
-├── 📁 Models/               → Business Entities and Database Models
+├── Models
 │   ├── User.cs
 │   ├── Property.cs
 │   └── Inquiry.cs
 │
-├── 📁 Views/                → Razor UI Pages
-│   ├── Home/
-│   ├── Account/
-│   ├── Property/
-│   └── Shared/
+├── Views
+│   ├── Home
+│   ├── Account
+│   ├── Property
+│   └── Shared
 │
-├── 📁 Data/                 → Database Context & EF Core Migrations
+├── Data
 │   └── ApplicationDbContext.cs
 │
-├── 📁 wwwroot/              → Static Files (CSS, JS, Uploaded Property Images)
-│   ├── css/
-│   ├── js/
-│   └── images/
+├── wwwroot
+│   ├── css
+│   ├── js
+│   └── images
 │
-├── appsettings.json         → App Configuration & Database Connection Strings
-└── Program.cs               → Application Pipeline & Service Configurations
+├── appsettings.json
+└── Program.cs
+```
 
-💻 Local Setup & Execution Guide
-1️⃣ Prerequisites
-Make sure you have the following installed on your local machine:
+---
 
-Visual Studio 2022 (with .NET and web development workload selected)
+# 🗄 Database
 
-SQL Server 2022 & SSMS
+**Database Name**
 
-Git
+```
+RealEstateDB
+```
 
-2️⃣ Installation Steps
-Clone the Repository:
+**ORM**
 
-Bash
-git clone [https://github.com/Maitri972/RealEstateManagementSystem.git](https://github.com/Maitri972/RealEstateManagementSystem.git)
+- Entity Framework Core
+- Code First Approach
+- SQL Server 2022
+
+---
+
+# ⚙ Installation Guide
+
+## 1. Clone Repository
+
+```bash
+git clone https://github.com/Maitri972/RealEstateManagementSystem.git
+```
+
+```bash
 cd RealEstateManagementSystem
-Open in Visual Studio:
+```
 
-Launch Visual Studio 2022 and open RealEstateManagementSystem.sln.
+---
 
-Configure SQL Server Connection:
+## 2. Open Project
 
-Update the connection string in appsettings.json:
+Open the solution file using **Visual Studio 2022**.
 
-JSON
+---
+
+## 3. Configure Database
+
+Edit **appsettings.json**
+
+```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=YOUR_LOCAL_SQL_SERVER;Database=RealEstateDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=RealEstateDB;Trusted_Connection=True;TrustServerCertificate=True;"
 }
-Apply Database Migrations:
+```
 
-Open Package Manager Console (Tools -> NuGet Package Manager -> Package Manager Console) and run:
+---
 
-Bash
+## 4. Apply Migration
+
+Open **Package Manager Console**
+
+```powershell
 Update-Database
-Run the Project:
+```
 
-Press F5 or click IIS Express / Start to launch the site locally.
+---
 
-📄 License
-This project is developed for educational purposes under the B.Tech Computer Engineering Curriculum. 
+## 5. Run Application
 
-🌐 Live Application URL
-🚀 Live Demo: Updated here.
+Press **F5** or click **IIS Express**.
 
+---
+
+# 📸 Screenshots
+
+Add screenshots here.
+
+```
+Home Page
+
+Login Page
+
+Admin Dashboard
+
+Property List
+
+Add Property
+
+Search Property
+
+Inquiry Page
+```
+
+---
+
+# 👥 Team Members
+
+| Name | Enrollment Number |
+|------|-------------------|
+| **Maitri Adroja** | 92400103446 |
+| **Krupa Makwana** | 92400103408 |
+| **Manthan Makwana** | 92400103407 |
+
+---
+
+# 🎯 Learning Outcomes
+
+- ASP.NET Core MVC
+- Entity Framework Core
+- SQL Server Integration
+- Authentication & Authorization
+- CRUD Operations
+- Bootstrap Responsive Design
+- MVC Design Pattern
+- Code First Migration
+- Git & GitHub
+
+---
+
+# 📄 License
+
+This project is developed solely for **educational purposes** as part of the **B.Tech Computer Engineering Curriculum**.
+
+---
+
+# 🌐 Live Demo
+
+🚀 **Live Application**
+
+```
+https://your-live-demo-link.com
+```
+
+*(Replace with your deployed application URL.)*
+
+---
+
+# ⭐ Support
+
+If you found this project helpful, please consider giving it a **⭐ Star** on GitHub.
+
+---
+
+**Developed with ❤️ using ASP.NET Core MVC & SQL Server**
 
 
 ⭐ Star this repository if you find it helpful!
