@@ -228,7 +228,7 @@ This project is developed solely for **educational purposes** as part of the **B
 https://your-live-demo-link.com
 ```
 
-*(Replace with your deployed application URL.)*
+Live URL Updated here.
 
 ---
 
