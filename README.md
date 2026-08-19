@@ -17,7 +17,7 @@ A modern **Real Estate Management System** developed using **ASP.NET Core MVC**,
 - **Project Type:** Continuous Semester Evaluation (Mini Project)
 - **Framework:** ASP.NET Core MVC
 - **Language:** C#
-- **Database:** SQL Server 2022
+- **Database:** SQL Server 2022 
 
 ---
 
