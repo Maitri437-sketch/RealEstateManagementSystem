@@ -1,8 +1,105 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Grand Heights Residency | Housing Society";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to the multibillion society</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5 pb-4 border-bottom">
+        <div class="col-lg-7 text-center text-lg-start">
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill mb-3">
+                Gated Community & Living
+            </span>
+            <h1 class="display-4 fw-bold text-dark mb-3">Welcome to Grand Heights Residency</h1>
+            <p class="lead text-muted mb-4">
+                Experience modern living, premium amenities, and a connected neighborhood. Manage society maintenance, explore facilities, and stay updated with community notices.
+            </p>
+            <div class="d-flex justify-content-center justify-content-lg-start gap-3">
+                <a href="#amenities" class="btn btn-primary btn-lg px-4">Explore Amenities</a>
+                <a href="#resident-portal" class="btn btn-outline-secondary btn-lg px-4">Resident Portal</a>
+            </div>
+        </div>
+        <div class="col-lg-5 mt-4 mt-lg-0 text-center">
+            <div class="card shadow-sm border-0 bg-light p-4">
+                <h5 class="fw-bold text-dark mb-3">Society Quick Stats</h5>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="p-3 bg-white rounded shadow-sm">
+                            <h3 class="fw-bold text-primary mb-0">350+</h3>
+                            <small class="text-muted">Happy Families</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-white rounded shadow-sm">
+                            <h3 class="fw-bold text-primary mb-0">12</h3>
+                            <small class="text-muted">Towers</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-white rounded shadow-sm">
+                            <h3 class="fw-bold text-primary mb-0">24/7</h3>
+                            <small class="text-muted">Security & CCTV</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-white rounded shadow-sm">
+                            <h3 class="fw-bold text-primary mb-0">5 Acres</h3>
+                            <small class="text-muted">Green Spaces</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Society Amenities Grid -->
+    <div class="mb-5" id="amenities">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Community Amenities</h2>
+            <p class="text-muted">Designed for comfort, recreation, and community well-being.</p>
+        </div>
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 p-4">
+                    <div class="card-body">
+                        <div class="fs-1 text-primary mb-3">🏊</div>
+                        <h5 class="card-title fw-bold">Clubhouse & Pool</h5>
+                        <p class="card-text text-secondary">Olympic-size swimming pool, community hall, and lounge areas for events.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 p-4">
+                    <div class="card-body">
+                        <div class="fs-1 text-primary mb-3">🌳</div>
+                        <h5 class="card-title fw-bold">Parks & Jogging Track</h5>
+                        <p class="card-text text-secondary">Lush green landscaped gardens with dedicated children's play zones.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 p-4">
+                    <div class="card-body">
+                        <div class="fs-1 text-primary mb-3">🛡️</div>
+                        <h5 class="card-title fw-bold">Smart Security</h5>
+                        <p class="card-text text-secondary">App-based visitor tracking, RFID vehicle access, and 24/7 guarded gates.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resident Services / Quick Links -->
+    <div class="card bg-primary text-white border-0 shadow rounded-4 p-4 text-center" id="resident-portal">
+        <div class="card-body py-3">
+            <h3 class="fw-bold mb-2">Are you a Resident?</h3>
+            <p class="text-white-50 col-md-8 mx-auto mb-4">
+                Pay maintenance dues, book the clubhouse for events, or raise a support ticket directly through the portal.
+            </p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="/Maintenance/Pay" class="btn btn-light fw-bold px-4">Pay Maintenance</a>
+                <a href="/Helpdesk/New" class="btn btn-outline-light px-4">Raise Complaint</a>
+                <a href="/Notices" class="btn btn-outline-light px-4">Society Notices</a>
+            </div>
+        </div>
+    </div>
 </div>
