@@ -251,3 +251,896 @@ body {
 .footer-main a:hover {
     color: #ffffff;
 }
+
+/* ==========================================
+   REAL ESTATE — BOTANICAL ORGANIC DESIGN
+   ASP.NET Core MVC + Bootstrap 5
+   ========================================== */
+
+:root {
+    --botanical-bg: #F9F8F4;
+    --botanical-forest: #2D3A31;
+    --botanical-sage: #8C9A84;
+    --botanical-clay: #DCCFC2;
+    --botanical-terra: #C27B66;
+    --botanical-border: #E6E2DA;
+    --botanical-card: #FFFFFF;
+    --botanical-muted: #777D73;
+
+    --font-heading: "Playfair Display", Georgia, serif;
+    --font-body: "Source Sans 3", sans-serif;
+
+    --radius-card: 24px;
+    --radius-pill: 999px;
+
+    --shadow-soft: 0 4px 16px rgba(45, 58, 49, 0.05);
+    --shadow-hover: 0 16px 36px rgba(45, 58, 49, 0.09);
+
+    --transition-smooth: 500ms ease-out;
+}
+
+/* Base */
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+}
+
+body.botanical-site {
+    background: var(--botanical-bg);
+    color: var(--botanical-forest);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+.botanical-site *,
+.botanical-site *::before,
+.botanical-site *::after {
+    box-sizing: border-box;
+}
+
+.botanical-site h1,
+.botanical-site h2,
+.botanical-site h3,
+.botanical-site h4,
+.botanical-site h5,
+.botanical-site h6 {
+    color: var(--botanical-forest);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+}
+
+.botanical-site a {
+    color: inherit;
+    text-decoration: none;
+    transition:
+        color 300ms ease,
+        background-color 300ms ease,
+        border-color 300ms ease;
+}
+
+.botanical-site a:focus-visible,
+.botanical-site button:focus-visible {
+    outline: 2px solid var(--botanical-sage);
+    outline-offset: 4px;
+}
+
+/* Subtle paper-grain texture */
+
+.botanical-site::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    pointer-events: none;
+    opacity: 0.015;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+}
+
+/* Navigation */
+
+.site-header {
+    z-index: 1030;
+    background: rgba(249, 248, 244, 0.97);
+    border-bottom: 1px solid var(--botanical-border);
+}
+
+.botanical-navbar {
+    min-height: 86px;
+    padding: 14px 0;
+    background: transparent;
+}
+
+.botanical-brand {
+    color: var(--botanical-forest) !important;
+    font-family: var(--font-heading);
+    font-size: 1.65rem;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+}
+
+.brand-mark,
+.footer-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.brand-mark {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--botanical-border);
+    border-radius: 50%;
+    background: #F0F0E8;
+    color: var(--botanical-forest);
+    font-size: 1.4rem;
+}
+
+.brand-period {
+    color: var(--botanical-terra);
+}
+
+.botanical-nav {
+    gap: 5px;
+    margin-left: 32px;
+}
+
+.botanical-nav .nav-link {
+    position: relative;
+    padding: 12px 13px !important;
+    color: var(--botanical-forest);
+    font-size: 0.94rem;
+    font-weight: 500;
+}
+
+.botanical-nav .nav-link:hover,
+.botanical-nav .nav-link:focus {
+    color: var(--botanical-terra);
+}
+
+.botanical-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    right: 13px;
+    bottom: 5px;
+    left: 13px;
+    height: 1px;
+    background: var(--botanical-terra);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms ease;
+}
+
+.botanical-nav .nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+.botanical-toggler {
+    border: 1px solid var(--botanical-border);
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: none !important;
+}
+
+.botanical-auth {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Authentication partial — style common Bootstrap controls */
+
+.botanical-auth .btn,
+.botanical-auth button,
+.botanical-auth input[type="submit"] {
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.botanical-auth .btn-primary,
+.botanical-auth .btn-success {
+    border-color: var(--botanical-forest);
+    background: var(--botanical-forest);
+    color: #fff;
+}
+
+.botanical-auth .btn-primary:hover,
+.botanical-auth .btn-success:hover {
+    border-color: var(--botanical-terra);
+    background: var(--botanical-terra);
+    color: #fff;
+}
+
+/* Main content */
+
+.site-main {
+    min-width: 0;
+}
+
+.botanical-alerts {
+    padding-top: 20px;
+}
+
+.botanical-alert {
+    border: 1px solid var(--botanical-border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow-soft);
+}
+
+.botanical-site .alert-success {
+    background: #EEF3EA;
+    color: #2D5738;
+}
+
+.botanical-site .alert-danger {
+    background: #F9ECE8;
+    color: #8B4033;
+}
+
+.botanical-site .alert-info {
+    background: #EDF1EE;
+    color: var(--botanical-forest);
+}
+
+/* Global buttons for existing page content */
+
+.botanical-site .btn {
+    transition:
+        transform 300ms ease,
+        background-color 300ms ease,
+        border-color 300ms ease,
+        color 300ms ease,
+        box-shadow 300ms ease;
+}
+
+.botanical-site .btn-primary {
+    border-color: var(--botanical-forest);
+    border-radius: var(--radius-pill);
+    background: var(--botanical-forest);
+    color: #fff;
+}
+
+.botanical-site .btn-primary:hover {
+    border-color: var(--botanical-terra);
+    background: var(--botanical-terra);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.botanical-site .btn-outline-primary {
+    border-color: var(--botanical-sage);
+    border-radius: var(--radius-pill);
+    color: var(--botanical-forest);
+}
+
+.botanical-site .btn-outline-primary:hover {
+    border-color: var(--botanical-forest);
+    background: var(--botanical-forest);
+    color: #fff;
+}
+
+.botanical-site .form-control,
+.botanical-site .form-select {
+    min-height: 48px;
+    border: 1px solid var(--botanical-border);
+    border-radius: 14px;
+    background-color: #fff;
+    color: var(--botanical-forest);
+    box-shadow: none;
+}
+
+.botanical-site .form-control:focus,
+.botanical-site .form-select:focus {
+    border-color: var(--botanical-sage);
+    box-shadow: 0 0 0 3px rgba(140, 154, 132, 0.16);
+}
+
+/* Footer */
+
+.footer-main {
+    position: relative;
+    margin-top: 72px;
+    padding: 76px 0 0;
+    overflow: hidden;
+    background: var(--botanical-forest);
+    color: #E7E8DF;
+}
+
+.footer-main::before {
+    content: "";
+    position: absolute;
+    top: -130px;
+    right: -100px;
+    width: 340px;
+    height: 340px;
+    border: 1px solid rgba(220, 207, 194, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.footer-main::after {
+    content: "";
+    position: absolute;
+    top: -85px;
+    right: -55px;
+    width: 250px;
+    height: 250px;
+    border: 1px solid rgba(220, 207, 194, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 60px;
+}
+
+.footer-brand {
+    color: #F9F8F4 !important;
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+}
+
+.footer-brand-mark {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(230, 226, 218, 0.25);
+    border-radius: 50%;
+    color: #D9DFD1;
+    font-size: 1.4rem;
+}
+
+.footer-description {
+    max-width: 390px;
+    color: #C5CCC0;
+    font-size: 0.96rem;
+    line-height: 1.9;
+}
+
+.footer-heading {
+    margin: 8px 0 24px;
+    color: #F9F8F4 !important;
+    font-size: 1.15rem;
+    font-weight: 500;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    margin: 0;
+}
+
+.footer-links a,
+.footer-legal a {
+    color: #C5CCC0;
+    font-size: 0.94rem;
+}
+
+.footer-links a:hover,
+.footer-legal a:hover {
+    color: #E3B19C;
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #C5CCC0;
+    font-size: 0.94rem;
+}
+
+.footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.footer-contact i {
+    margin-top: 5px;
+    color: #B8C5AD;
+    font-size: 1rem;
+}
+
+.footer-socials a {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(230, 226, 218, 0.22);
+    border-radius: 50%;
+    color: #E7E8DF;
+    transition: var(--transition-smooth);
+}
+
+.footer-socials a:hover {
+    border-color: var(--botanical-clay);
+    background: var(--botanical-clay);
+    color: var(--botanical-forest);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 0;
+    border-top: 1px solid rgba(230, 226, 218, 0.18);
+    color: #C5CCC0;
+    font-size: 0.86rem;
+}
+
+.footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+    .botanical-site *,
+    .botanical-site *::before,
+    .botanical-site *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Tablet and mobile */
+
+@media (max-width: 991.98px) {
+    .botanical-navbar {
+        min-height: 74px;
+    }
+
+    .botanical-nav {
+        gap: 0;
+        margin: 16px 0 8px;
+        padding: 10px 0;
+        border-top: 1px solid var(--botanical-border);
+    }
+
+    .botanical-nav .nav-link {
+        padding: 12px 8px !important;
+    }
+
+    .botanical-nav .nav-link::after {
+        display: none;
+    }
+
+    .botanical-auth {
+        padding: 8px 0 12px;
+        flex-wrap: wrap;
+    }
+
+    .footer-main {
+        margin-top: 48px;
+        padding-top: 54px;
+    }
+
+    .footer-content {
+        padding-bottom: 40px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .botanical-brand {
+        font-size: 1.4rem;
+    }
+
+    .brand-mark {
+        width: 39px;
+        height: 39px;
+        font-size: 1.2rem;
+    }
+
+    .botanical-alerts {
+        padding-top: 14px;
+    }
+
+    .footer-main {
+        margin-top: 36px;
+        padding-top: 42px;
+    }
+
+    .footer-content {
+        row-gap: 32px !important;
+        padding-bottom: 32px;
+    }
+
+    .footer-heading {
+        margin-bottom: 16px;
+    }
+
+    .footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .footer-legal {
+        gap: 9px;
+    }
+}
+
+/* =====================================
+   NIVARA REALTY — RESPONSIVE HEADER
+   ===================================== */
+
+.signature-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E2E8F0;
+    box-shadow: 0 3px 16px rgba(30, 41, 59, 0.04);
+}
+
+.signature-navbar {
+    min-height: 88px;
+    padding: 10px 0;
+    background: #FFFFFF;
+}
+
+.signature-navbar-shell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 66px;
+    gap: 20px;
+}
+
+/* Logo */
+
+.signature-brand {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    max-width: 240px;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.signature-brand-image {
+    display: block;
+    width: 218px;
+    height: 76px;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left center;
+}
+
+/* Mobile toggle */
+
+.signature-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background: #F8FAFC;
+    box-shadow: none !important;
+}
+
+.signature-menu-toggle:hover {
+    border-color: #D97706;
+    background: #FFFFFF;
+}
+
+/* Desktop: brand left, nav centered, account right */
+
+@media (min-width: 1200px) {
+    .signature-navbar .signature-collapse {
+        display: flex !important;
+        flex: 1 1 auto;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 0;
+    }
+
+    .signature-navbar .signature-menu-toggle {
+        display: none;
+    }
+
+    .signature-nav {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+
+        width: max-content;
+        margin: 0;
+        padding: 5px;
+
+        border: 1px solid #E2E8F0;
+        border-radius: 16px;
+        background: #F8FAFC;
+    }
+
+    .signature-nav .nav-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        min-height: 42px;
+        padding: 9px 13px;
+
+        border-radius: 11px;
+        color: #475569;
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 0.94rem;
+        font-weight: 600;
+        white-space: nowrap;
+
+        transition:
+            background-color 200ms ease,
+            color 200ms ease;
+    }
+
+    .signature-nav .nav-link i {
+        color: #64748B;
+        font-size: 1rem;
+    }
+
+    .signature-nav .nav-link:hover,
+    .signature-nav .nav-link:focus-visible {
+        background: #FFFFFF;
+        color: #1E293B;
+    }
+
+    .signature-nav .nav-link:hover i {
+        color: #D97706;
+    }
+
+    .signature-account {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        margin-left: auto;
+        padding-left: 14px;
+    }
+
+    .signature-account .navbar-nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+    }
+}
+
+/* Account links */
+
+.signature-account .nav-link,
+.signature-account a:not(.btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #1E293B;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.signature-account .nav-link:hover,
+.signature-account a:not(.btn):hover {
+    background: #F8FAFC;
+    color: #D97706;
+}
+
+/* Primary account actions */
+
+.signature-account .btn-primary,
+.signature-account .btn-success {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 45px;
+    padding: 10px 19px;
+    border: 1px solid #D97706;
+    border-radius: 12px;
+    background: #D97706;
+    color: #FFFFFF;
+    font-family: "Source Sans 3", sans-serif;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.12);
+    transition:
+        background-color 200ms ease,
+        transform 200ms ease;
+}
+
+.signature-account .btn-primary:hover,
+.signature-account .btn-success:hover {
+    transform: translateY(-1px);
+    border-color: #B86205;
+    background: #B86205;
+    color: #FFFFFF;
+}
+
+/* Tablet and mobile menu */
+
+@media (max-width: 1199.98px) {
+    .signature-navbar {
+        min-height: 76px;
+        padding: 8px 0;
+    }
+
+    .signature-brand {
+        max-width: calc(100% - 66px);
+    }
+
+    .signature-brand-image {
+        width: 195px;
+        height: 66px;
+    }
+
+    .signature-navbar .signature-collapse {
+        flex-basis: 100%;
+        width: 100%;
+        margin-top: 12px;
+        padding: 13px;
+
+        border: 1px solid #E2E8F0;
+        border-radius: 19px;
+        background: #FFFFFF;
+        box-shadow: 0 12px 28px rgba(30, 41, 59, 0.07);
+    }
+
+    .signature-navbar .signature-collapse.collapse:not(.show) {
+        display: none !important;
+    }
+
+    .signature-navbar .signature-collapse.collapse.show,
+    .signature-navbar .signature-collapse.collapsing {
+        display: block !important;
+    }
+
+    .signature-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        margin: 0;
+        padding: 0 0 12px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    .signature-nav .nav-item {
+        width: 100%;
+    }
+
+    .signature-nav .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        min-height: 47px;
+        padding: 11px 13px;
+        border-radius: 11px;
+        color: #1E293B;
+        font-weight: 600;
+        transition: background-color 200ms ease;
+    }
+
+    .signature-nav .nav-link i {
+        width: 23px;
+        color: #64748B;
+        text-align: center;
+        font-size: 1.05rem;
+    }
+
+    .signature-nav .nav-link:hover {
+        background: #F8FAFC;
+    }
+
+    .signature-nav .nav-link:hover i {
+        color: #D97706;
+    }
+
+    .signature-account {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        width: 100%;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #E2E8F0;
+    }
+
+    .signature-account .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        width: 100%;
+        margin: 0;
+    }
+
+    .signature-account .nav-item,
+    .signature-account form {
+        width: 100%;
+    }
+
+    .signature-account .nav-link,
+    .signature-account a:not(.btn) {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        min-height: 46px;
+    }
+
+    .signature-account .btn-primary,
+    .signature-account .btn-success,
+    .signature-account input[type="submit"] {
+        width: 100%;
+        min-height: 47px;
+    }
+}
+
+/* Small phones */
+
+@media (max-width: 380px) {
+    .signature-brand-image {
+        width: 160px;
+        height: 56px;
+    }
+
+    .signature-menu-toggle {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Keyboard accessibility */
+
+.signature-navbar a:focus-visible,
+.signature-navbar button:focus-visible {
+    outline: 3px solid rgba(217, 119, 6, 0.45);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .signature-navbar * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
