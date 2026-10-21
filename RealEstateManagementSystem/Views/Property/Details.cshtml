@@ -1,0 +1,346 @@
+@model RealEstateManagementSystem.Models.Property
+@using System.Security.Claims
+@{
+    ViewData["Title"] = Model.Title;
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var isOwner = Model.SellerId == currentUserId;
+    var isAdmin = User.IsInRole("Admin");
+    var isAssignedAgent = Model.AgentId == currentUserId;
+    var canEdit = isAdmin || isOwner || isAssignedAgent;
+
+    var images = Model.Images.ToList();
+    var mainImage = images.FirstOrDefault(i => i.IsMain)?.ImageUrl 
+                    ?? images.FirstOrDefault()?.ImageUrl 
+                    ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+
+    var averageRating = Model.Reviews.Any() ? Model.Reviews.Average(r => r.Rating) : 0;
+}
+
+<div class="container py-4">
+    <!-- Top Breadcrumbs & Actions -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2 mb-md-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Property" asp-action="Index">Properties</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex align-items-center gap-2">
+            <a asp-controller="Wishlist" asp-action="Toggle" asp-route-propertyId="@Model.Id" 
+               class="btn btn-outline-danger btn-sm @(ViewBag.IsWishlisted == true ? "active" : "")">
+                <i class="bi @(ViewBag.IsWishlisted == true ? "bi-heart-fill" : "bi-heart") me-1"></i>
+                @(ViewBag.IsWishlisted == true ? "Saved" : "Save")
+            </a>
+            <a asp-controller="Comparison" asp-action="Add" asp-route-propertyId="@Model.Id" 
+               class="btn btn-outline-info btn-sm @(ViewBag.IsCompared == true ? "active" : "")">
+                <i class="bi bi-arrow-left-right me-1"></i> Compare
+            </a>
+
+            @if (canEdit)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-pencil-square me-1"></i> Edit Listing
+                </a>
+            }
+            @if (isAdmin || isOwner)
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-trash me-1"></i> Delete
+                </a>
+            }
+        </div>
+    </div>
+
+    <!-- Title & Price Header -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex gap-2 mb-2 flex-wrap align-items-center">
+                    <span class="badge @(Model.ListingType == "Sale" ? "bg-success" : "bg-info") px-3 py-1 fs-6">
+                        For @Model.ListingType
+                    </span>
+                    <span class="badge bg-secondary px-3 py-1 fs-6">@Model.PropertyType</span>
+                    @if (Model.IsFeatured)
+                    {
+                        <span class="badge bg-warning text-dark px-3 py-1 fs-6">
+                            <i class="bi bi-star-fill"></i> Featured
+                        </span>
+                    }
+                    <span class="badge @(Model.Status switch { "Approved" => "bg-success-subtle text-success", "Pending" => "bg-warning-subtle text-warning", "Rejected" => "bg-danger-subtle text-danger", _ => "bg-light text-dark" }) px-3 py-1 fs-6">
+                        Status: @Model.Status
+                    </span>
+                </div>
+                <h1 class="h2 fw-bold text-dark mb-1">@Model.Title</h1>
+                <p class="text-muted mb-0">
+                    <i class="bi bi-geo-alt-fill text-danger me-1"></i> @Model.Address, @Model.City, @Model.State @Model.ZipCode
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <div class="display-6 fw-bold text-primary mb-0">$@Model.Price.ToString("N0")</div>
+                @if (Model.ListingType == "Rent")
+                {
+                    <small class="text-muted fw-semibold">per month</small>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Carousel / Gallery -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 bg-white">
+        @if (images.Any())
+        {
+            <div id="propertyGalleryCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    @for (int i = 0; i < images.Count; i++)
+                    {
+                        <button type="button" data-bs-target="#propertyGalleryCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i+1)"></button>
+                    }
+                </div>
+                <div class="carousel-inner" style="max-height: 520px; background-color: #0f172a;">
+                    @for (int i = 0; i < images.Count; i++)
+                    {
+                        <div class="carousel-item @(i == 0 ? "active" : "") text-center">
+                            <img src="@images[i].ImageUrl" class="d-block w-100" style="height: 520px; object-fit: cover;" alt="Property Image @(i+1)">
+                        </div>
+                    }
+                </div>
+                @if (images.Count > 1)
+                {
+                    <button class="carousel-control-prev" type="button" data-bs-target="#propertyGalleryCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#propertyGalleryCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5 bg-light">
+                <i class="bi bi-image text-muted display-1"></i>
+                <p class="text-muted mt-2">No photos uploaded for this property yet.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Main Content & Sidebar -->
+    <div class="row g-4">
+        <!-- Property Details & Overview -->
+        <div class="col-lg-8">
+            <!-- Key Specifications Grid -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                <h4 class="fw-bold mb-3">Key Features & Specifications</h4>
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <i class="bi bi-door-closed text-primary fs-3 d-block mb-1"></i>
+                            <span class="small text-muted d-block">Bedrooms</span>
+                            <span class="fw-bold fs-5 text-dark">@Model.Bedrooms</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <i class="bi bi-droplet text-info fs-3 d-block mb-1"></i>
+                            <span class="small text-muted d-block">Bathrooms</span>
+                            <span class="fw-bold fs-5 text-dark">@Model.Bathrooms</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <i class="bi bi-bounding-box text-success fs-3 d-block mb-1"></i>
+                            <span class="small text-muted d-block">Square Feet</span>
+                            <span class="fw-bold fs-5 text-dark">@Model.AreaSqFt.ToString("N0")</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <i class="bi bi-calendar3 text-warning fs-3 d-block mb-1"></i>
+                            <span class="small text-muted d-block">Year Built</span>
+                            <span class="fw-bold fs-5 text-dark">@(Model.YearBuilt.HasValue ? Model.YearBuilt.Value.ToString() : "N/A")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Description -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                <h4 class="fw-bold mb-3">Property Description</h4>
+                <p class="text-secondary leading-relaxed mb-0" style="white-space: pre-line; line-height: 1.8;">
+                    @Model.Description
+                </p>
+            </div>
+
+            <!-- Client Reviews Section -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white" id="reviews">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="fw-bold mb-0">Client Reviews (@Model.Reviews.Count)</h4>
+                        @if (Model.Reviews.Any())
+                        {
+                            <div class="d-flex align-items-center gap-2 mt-1">
+                                <span class="star-rating fs-5">
+                                    @for (int s = 1; s <= 5; s++)
+                                    {
+                                        <i class="bi @(s <= Math.Round(averageRating) ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+                                </span>
+                                <span class="fw-bold text-dark">@averageRating.ToString("0.0")</span>
+                                <span class="text-muted small">out of 5.0</span>
+                            </div>
+                        }
+                    </div>
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Client"))
+                    {
+                        <a href="#submitReview" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-pencil-fill me-1"></i> Write Review
+                        </a>
+                    }
+                </div>
+
+                <!-- Existing Reviews List -->
+                @if (Model.Reviews.Any())
+                {
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+                        {
+                            <div class="p-3 rounded-3 bg-light border">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 13px;">
+                                            @((review.Client?.FullName ?? "U").Substring(0, 1).ToUpper())
+                                        </div>
+                                        <span class="fw-bold text-dark">@(review.Client?.FullName ?? "Verified Client")</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="star-rating small">
+                                            @for (int s = 1; s <= 5; s++)
+                                            {
+                                                <i class="bi @(s <= review.Rating ? "bi-star-fill" : "bi-star")"></i>
+                                            }
+                                        </span>
+                                        <small class="text-muted ms-2">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                </div>
+                                <p class="text-secondary small mb-0">@review.Comment</p>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted py-2 mb-4">No reviews submitted for this property yet. Be the first client to leave feedback!</p>
+                }
+
+                <!-- Add Review Form for logged in clients -->
+                @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Client"))
+                {
+                    <div class="p-4 bg-light rounded-4 border" id="submitReview">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-star-fill text-warning me-1"></i> Leave a Review</h5>
+                        <form asp-controller="Review" asp-action="Create" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="PropertyId" value="@Model.Id" />
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Your Rating (1 to 5 Stars)</label>
+                                <select name="Rating" class="form-select form-select-sm" style="max-width: 200px;" required>
+                                    <option value="5">⭐⭐⭐⭐⭐ (5 - Exceptional)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
+                                    <option value="3">⭐⭐⭐ (3 - Average)</option>
+                                    <option value="2">⭐⭐ (2 - Below Average)</option>
+                                    <option value="1">⭐ (1 - Poor)</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Comments & Feedback</label>
+                                <textarea name="Comment" class="form-control" rows="3" placeholder="Share your thoughts about this property, location, neighborhood, or pricing..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-sm fw-bold px-3">
+                                <i class="bi bi-send me-1"></i> Submit Review
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Sidebar: Agent/Seller & Action CTAs -->
+        <div class="col-lg-4">
+            <!-- Contact / Booking Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white sticky-lg-top" style="top: 80px;">
+                <h5 class="fw-bold mb-3">Listing Representative</h5>
+
+                @if (Model.Agent != null)
+                {
+                    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 border mb-3">
+                        <div class="rounded-circle bg-info text-dark d-inline-flex align-items-center justify-content-center fw-bold" style="width: 48px; height: 48px; font-size: 1.2rem;">
+                            @Model.Agent.FullName.Substring(0, 1).ToUpper()
+                        </div>
+                        <div>
+                            <span class="badge bg-info text-dark small mb-1">Assigned Agent</span>
+                            <h6 class="fw-bold mb-0">@Model.Agent.FullName</h6>
+                            <small class="text-muted">@Model.Agent.Email</small>
+                            @if (!string.IsNullOrEmpty(Model.Agent.PhoneNumber))
+                            {
+                                <small class="d-block text-muted"><i class="bi bi-telephone"></i> @Model.Agent.PhoneNumber</small>
+                            }
+                        </div>
+                    </div>
+                }
+                else if (Model.Seller != null)
+                {
+                    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 border mb-3">
+                        <div class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center fw-bold" style="width: 48px; height: 48px; font-size: 1.2rem;">
+                            @Model.Seller.FullName.Substring(0, 1).ToUpper()
+                        </div>
+                        <div>
+                            <span class="badge bg-success small mb-1">Property Owner</span>
+                            <h6 class="fw-bold mb-0">@Model.Seller.FullName</h6>
+                            <small class="text-muted">@Model.Seller.Email</small>
+                            @if (!string.IsNullOrEmpty(Model.Seller.PhoneNumber))
+                            {
+                                <small class="d-block text-muted"><i class="bi bi-telephone"></i> @Model.Seller.PhoneNumber</small>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="d-grid gap-2">
+                    <a asp-controller="Appointment" asp-action="Book" asp-route-propertyId="@Model.Id" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                        <i class="bi bi-calendar2-check me-2"></i> Schedule a Tour
+                    </a>
+                    <a asp-controller="Inquiry" asp-action="Create" asp-route-propertyId="@Model.Id" class="btn btn-outline-primary btn-lg fw-bold">
+                        <i class="bi bi-chat-left-dots me-2"></i> Ask a Question
+                    </a>
+                </div>
+
+                <hr class="my-4" />
+
+                <!-- Property Metadata Details -->
+                <div class="small text-muted d-flex flex-column gap-2">
+                    <div class="d-flex justify-content-between">
+                        <span>Property ID:</span>
+                        <strong class="text-dark">#@Model.Id</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Listed On:</span>
+                        <strong class="text-dark">@Model.CreatedAt.ToString("MMM dd, yyyy")</strong>
+                    </div>
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <div class="d-flex justify-content-between">
+                            <span>Last Updated:</span>
+                            <strong class="text-dark">@Model.UpdatedAt.Value.ToString("MMM dd, yyyy")</strong>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

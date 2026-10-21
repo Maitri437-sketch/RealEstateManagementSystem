@@ -1,0 +1,125 @@
+@model List<RealEstateManagementSystem.Models.Property>
+@{
+    ViewData["Title"] = "Property Management";
+    var currentStatus = ViewBag.CurrentStatus as string;
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-houses-fill me-2"></i> All Properties</h1>
+            <p class="text-white-50 mb-0">Monitor, feature, and manage all marketplace listings across all statuses</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a asp-action="PendingApprovals" class="btn btn-warning text-dark fw-bold">
+                <i class="bi bi-hourglass-split me-1"></i> Pending Queue
+            </a>
+            <a asp-controller="Property" asp-action="Create" class="btn btn-light text-primary fw-bold">
+                <i class="bi bi-plus-circle-fill me-1"></i> Add Property
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Status Filter Pills -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <span class="small fw-bold text-muted me-2">Filter by Status:</span>
+            <a asp-action="Properties" class="btn btn-sm @(string.IsNullOrEmpty(currentStatus) ? "btn-primary" : "btn-outline-secondary")">
+                All Properties (@Model.Count)
+            </a>
+            <a asp-action="Properties" asp-route-status="Approved" class="btn btn-sm @(currentStatus == "Approved" ? "btn-success" : "btn-outline-success")">
+                Approved
+            </a>
+            <a asp-action="Properties" asp-route-status="Pending" class="btn btn-sm @(currentStatus == "Pending" ? "btn-warning text-dark" : "btn-outline-warning")">
+                Pending
+            </a>
+            <a asp-action="Properties" asp-route-status="Rejected" class="btn btn-sm @(currentStatus == "Rejected" ? "btn-danger" : "btn-outline-danger")">
+                Rejected
+            </a>
+            <a asp-action="Properties" asp-route-status="Sold" class="btn btn-sm @(currentStatus == "Sold" ? "btn-secondary" : "btn-outline-secondary")">
+                Sold / Rented
+            </a>
+        </div>
+    </div>
+
+    <!-- Properties Table -->
+    <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Property</th>
+                        <th>Type / Offer</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Featured</th>
+                        <th>Seller / Agent</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var property in Model)
+                    {
+                        var mainImage = property.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl 
+                                        ?? property.Images.FirstOrDefault()?.ImageUrl 
+                                        ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="@mainImage" alt="@property.Title" class="rounded-3" style="width: 70px; height: 50px; object-fit: cover;" />
+                                    <div>
+                                        <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="fw-bold text-dark text-decoration-none">
+                                            @property.Title
+                                        </a>
+                                        <small class="text-muted d-block"><i class="bi bi-geo-alt"></i> @property.City, @property.State</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border">@property.PropertyType</span>
+                                <span class="badge @(property.ListingType == "Sale" ? "bg-success" : "bg-info")">For @property.ListingType</span>
+                            </td>
+                            <td class="fw-bold text-primary">
+                                $@property.Price.ToString("N0")
+                            </td>
+                            <td>
+                                <span class="badge @(property.Status switch { "Approved" => "bg-success", "Pending" => "bg-warning text-dark", "Rejected" => "bg-danger", _ => "bg-secondary" })">
+                                    @property.Status
+                                </span>
+                            </td>
+                            <td>
+                                <form asp-action="ToggleFeatured" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@property.Id" />
+                                    <button type="submit" class="btn btn-sm @(property.IsFeatured ? "btn-warning" : "btn-outline-secondary") py-0 px-2" title="Toggle Featured">
+                                        <i class="bi @(property.IsFeatured ? "bi-star-fill text-dark" : "bi-star")"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="small">
+                                <div><strong>Seller:</strong> @(property.Seller?.FullName ?? "N/A")</div>
+                                <div><strong>Agent:</strong> @(property.Agent?.FullName ?? "Unassigned")</div>
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-secondary" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-controller="Property" asp-action="Edit" asp-route-id="@property.Id" class="btn btn-outline-primary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-controller="Property" asp-action="Delete" asp-route-id="@property.Id" class="btn btn-outline-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

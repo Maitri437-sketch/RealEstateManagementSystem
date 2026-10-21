@@ -1,0 +1,73 @@
+@model RealEstateManagementSystem.ViewModels.InquiryViewModel
+@{
+    ViewData["Title"] = "Inquire About " + Model.PropertyTitle;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-primary text-white p-4 rounded-top-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="h3 fw-bold mb-1"><i class="bi bi-chat-dots me-2"></i> Submit Property Inquiry</h2>
+                            <p class="mb-0 text-white-50">Send your questions directly to the certified agent or property owner</p>
+                        </div>
+                        <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.PropertyId" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Listing
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <!-- Property Summary Widget -->
+                    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-4 border mb-4">
+                        @if (!string.IsNullOrEmpty(Model.PropertyImageUrl))
+                        {
+                            <img src="@Model.PropertyImageUrl" class="rounded-3" style="width: 100px; height: 75px; object-fit: cover;" alt="Property">
+                        }
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">@Model.PropertyTitle</h5>
+                            <div class="text-primary fw-bold fs-5 mb-1">$@Model.PropertyPrice.ToString("N0")</div>
+                            <small class="text-muted"><i class="bi bi-geo-alt"></i> @Model.PropertyAddress</small>
+                        </div>
+                    </div>
+
+                    <form asp-action="Create" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="PropertyId" />
+                        <input type="hidden" asp-for="PropertyTitle" />
+                        <input type="hidden" asp-for="PropertyAddress" />
+                        <input type="hidden" asp-for="PropertyPrice" />
+                        <input type="hidden" asp-for="PropertyImageUrl" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Subject" class="form-label fw-bold small">Inquiry Subject <span class="text-danger">*</span></label>
+                            <input asp-for="Subject" class="form-control" placeholder="e.g. Asking about HOA fees, parking, or tour times..." />
+                            <span asp-validation-for="Subject" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Message" class="form-label fw-bold small">Your Message <span class="text-danger">*</span></label>
+                            <textarea asp-for="Message" class="form-control" rows="5" placeholder="Write your specific questions about this listing..."></textarea>
+                            <span asp-validation-for="Message" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                            <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.PropertyId" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-4">
+                                <i class="bi bi-send me-1"></i> Send Inquiry
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
