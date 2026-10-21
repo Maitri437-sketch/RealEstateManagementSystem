@@ -1,105 +1,367 @@
+@model RealEstateManagementSystem.ViewModels.HomeIndexViewModel
 @{
-    ViewData["Title"] = "Grand Heights Residency | Housing Society";
+    ViewData["Title"] = "Find Your Dream Home";
 }
 
-<div class="container py-5">
-    <!-- Hero Section -->
-    <div class="row align-items-center mb-5 pb-4 border-bottom">
-        <div class="col-lg-7 text-center text-lg-start">
-            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill mb-3">
-                Gated Community & Living
-            </span>
-            <h1 class="display-4 fw-bold text-dark mb-3">Welcome to Grand Heights Residency</h1>
-            <p class="lead text-muted mb-4">
-                Experience modern living, premium amenities, and a connected neighborhood. Manage society maintenance, explore facilities, and stay updated with community notices.
-            </p>
-            <div class="d-flex justify-content-center justify-content-lg-start gap-3">
-                <a href="#amenities" class="btn btn-primary btn-lg px-4">Explore Amenities</a>
-                <a href="#resident-portal" class="btn btn-outline-secondary btn-lg px-4">Resident Portal</a>
+<!-- Hero Section -->
+<section class="hero-section text-center text-lg-start">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <span class="badge bg-primary px-3 py-2 rounded-pill text-uppercase mb-3 fw-bold tracking-wide">
+                    <i class="bi bi-patch-check-fill me-1"></i> Verified Real Estate Platform
+                </span>
+                <h1 class="display-3 fw-bold text-white mb-3">Find Your Perfect Sanctuary</h1>
+                <p class="lead text-white-50 mb-4">
+                    Explore luxury villas, modern city penthouses, suburban family homes, and commercial spaces.
+                </p>
             </div>
         </div>
-        <div class="col-lg-5 mt-4 mt-lg-0 text-center">
-            <div class="card shadow-sm border-0 bg-light p-4">
-                <h5 class="fw-bold text-dark mb-3">Society Quick Stats</h5>
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="p-3 bg-white rounded shadow-sm">
-                            <h3 class="fw-bold text-primary mb-0">350+</h3>
-                            <small class="text-muted">Happy Families</small>
+
+        <!-- Hero Search Box -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="hero-search-box text-dark">
+                    <form asp-controller="Property" asp-action="Index" method="get">
+                        <div class="row g-3 align-items-center">
+                            <!-- Keyword -->
+                            <div class="col-md-4 col-12">
+                                <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-search me-1"></i> Keyword / Title</label>
+                                <input type="text" name="searchTerm" class="form-control form-control-lg fs-6" placeholder="e.g. Modern Villa, Penthouse..." />
+                            </div>
+
+                            <!-- City -->
+                            <div class="col-md-2 col-6">
+                                <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-geo-alt me-1"></i> City</label>
+                                <input type="text" name="city" class="form-control form-control-lg fs-6" placeholder="e.g. Miami, New York" />
+                            </div>
+
+                            <!-- Property Type -->
+                            <div class="col-md-2 col-6">
+                                <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-building me-1"></i> Type</label>
+                                <select name="propertyType" class="form-select form-select-lg fs-6">
+                                    <option value="">All Types</option>
+                                    <option value="House">House</option>
+                                    <option value="Apartment">Apartment</option>
+                                    <option value="Villa">Villa</option>
+                                    <option value="Condo">Condo</option>
+                                    <option value="Commercial">Commercial</option>
+                                </select>
+                            </div>
+
+                            <!-- Listing Type -->
+                            <div class="col-md-2 col-6">
+                                <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-tag me-1"></i> Status</label>
+                                <select name="listingType" class="form-select form-select-lg fs-6">
+                                    <option value="">Buy & Rent</option>
+                                    <option value="Sale">For Sale</option>
+                                    <option value="Rent">For Rent</option>
+                                </select>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-md-2 col-6 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary btn-lg w-100 fs-6 fw-bold py-2 mt-auto">
+                                    <i class="bi bi-search me-1"></i> Search
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-3 bg-white rounded shadow-sm">
-                            <h3 class="fw-bold text-primary mb-0">12</h3>
-                            <small class="text-muted">Towers</small>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-3 bg-white rounded shadow-sm">
-                            <h3 class="fw-bold text-primary mb-0">24/7</h3>
-                            <small class="text-muted">Security & CCTV</small>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-3 bg-white rounded shadow-sm">
-                            <h3 class="fw-bold text-primary mb-0">5 Acres</h3>
-                            <small class="text-muted">Green Spaces</small>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Society Amenities Grid -->
-    <div class="mb-5" id="amenities">
+<!-- Property Categories -->
+<section class="py-5 bg-white border-bottom">
+    <div class="container">
         <div class="text-center mb-4">
-            <h2 class="fw-bold">Community Amenities</h2>
-            <p class="text-muted">Designed for comfort, recreation, and community well-being.</p>
+            <h6 class="text-primary text-uppercase fw-bold">Explore By Type</h6>
+            <h2 class="fw-bold">Browse Popular Categories</h2>
         </div>
-        <div class="row g-4 text-center">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 p-4">
-                    <div class="card-body">
-                        <div class="fs-1 text-primary mb-3">🏊</div>
-                        <h5 class="card-title fw-bold">Clubhouse & Pool</h5>
-                        <p class="card-text text-secondary">Olympic-size swimming pool, community hall, and lounge areas for events.</p>
-                    </div>
-                </div>
+        <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-5">
+            <div class="col">
+                <a asp-controller="Property" asp-action="Index" asp-route-propertyType="House" class="category-card">
+                    <div class="category-icon"><i class="bi bi-house-door-fill"></i></div>
+                    <h6 class="fw-bold mb-1">Houses</h6>
+                    <small class="text-muted">@(Model.CategoryCounts.ContainsKey("House") ? Model.CategoryCounts["House"] : 0) Listings</small>
+                </a>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 p-4">
-                    <div class="card-body">
-                        <div class="fs-1 text-primary mb-3">🌳</div>
-                        <h5 class="card-title fw-bold">Parks & Jogging Track</h5>
-                        <p class="card-text text-secondary">Lush green landscaped gardens with dedicated children's play zones.</p>
-                    </div>
-                </div>
+            <div class="col">
+                <a asp-controller="Property" asp-action="Index" asp-route-propertyType="Apartment" class="category-card">
+                    <div class="category-icon"><i class="bi bi-buildings"></i></div>
+                    <h6 class="fw-bold mb-1">Apartments</h6>
+                    <small class="text-muted">@(Model.CategoryCounts.ContainsKey("Apartment") ? Model.CategoryCounts["Apartment"] : 0) Listings</small>
+                </a>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0 p-4">
-                    <div class="card-body">
-                        <div class="fs-1 text-primary mb-3">🛡️</div>
-                        <h5 class="card-title fw-bold">Smart Security</h5>
-                        <p class="card-text text-secondary">App-based visitor tracking, RFID vehicle access, and 24/7 guarded gates.</p>
-                    </div>
-                </div>
+            <div class="col">
+                <a asp-controller="Property" asp-action="Index" asp-route-propertyType="Villa" class="category-card">
+                    <div class="category-icon"><i class="bi bi-gem"></i></div>
+                    <h6 class="fw-bold mb-1">Luxury Villas</h6>
+                    <small class="text-muted">@(Model.CategoryCounts.ContainsKey("Villa") ? Model.CategoryCounts["Villa"] : 0) Listings</small>
+                </a>
+            </div>
+            <div class="col">
+                <a asp-controller="Property" asp-action="Index" asp-route-propertyType="Commercial" class="category-card">
+                    <div class="category-icon"><i class="bi bi-briefcase-fill"></i></div>
+                    <h6 class="fw-bold mb-1">Commercial</h6>
+                    <small class="text-muted">@(Model.CategoryCounts.ContainsKey("Commercial") ? Model.CategoryCounts["Commercial"] : 0) Listings</small>
+                </a>
+            </div>
+            <div class="col">
+                <a asp-controller="Property" asp-action="Index" asp-route-propertyType="Condo" class="category-card">
+                    <div class="category-icon"><i class="bi bi-building-check"></i></div>
+                    <h6 class="fw-bold mb-1">Condominiums</h6>
+                    <small class="text-muted">@(Model.CategoryCounts.ContainsKey("Condo") ? Model.CategoryCounts["Condo"] : 0) Listings</small>
+                </a>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Resident Services / Quick Links -->
-    <div class="card bg-primary text-white border-0 shadow rounded-4 p-4 text-center" id="resident-portal">
-        <div class="card-body py-3">
-            <h3 class="fw-bold mb-2">Are you a Resident?</h3>
-            <p class="text-white-50 col-md-8 mx-auto mb-4">
-                Pay maintenance dues, book the clubhouse for events, or raise a support ticket directly through the portal.
-            </p>
-            <div class="d-flex justify-content-center gap-3 flex-wrap">
-                <a href="/Maintenance/Pay" class="btn btn-light fw-bold px-4">Pay Maintenance</a>
-                <a href="/Helpdesk/New" class="btn btn-outline-light px-4">Raise Complaint</a>
-                <a href="/Notices" class="btn btn-outline-light px-4">Society Notices</a>
+<!-- Featured Properties Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
+            <div>
+                <span class="badge bg-danger-subtle text-danger px-3 py-1 rounded-pill fw-bold mb-2">Featured Selection</span>
+                <h2 class="fw-bold mb-0">Handpicked Exclusive Properties</h2>
+            </div>
+            <a asp-controller="Property" asp-action="Index" class="btn btn-outline-primary mt-3 mt-md-0">
+                View All Properties <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.FeaturedProperties != null && Model.FeaturedProperties.Any())
+            {
+                foreach (var property in Model.FeaturedProperties)
+                {
+                    var mainImage = property.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl 
+                                    ?? property.Images.FirstOrDefault()?.ImageUrl 
+                                    ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+                    var isWishlisted = Model.UserWishlistIds.Contains(property.Id);
+                    var isCompared = Model.UserComparisonIds.Contains(property.Id);
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="property-card h-100 d-flex flex-column">
+                            <div class="property-image-wrapper">
+                                <img src="@mainImage" alt="@property.Title" />
+                                <div class="property-badge-type">
+                                    <span class="badge @(property.ListingType == "Sale" ? "bg-success" : "bg-info") shadow-sm px-2 py-1">
+                                        For @property.ListingType
+                                    </span>
+                                    <span class="badge bg-warning text-dark shadow-sm px-2 py-1 ms-1">
+                                        <i class="bi bi-star-fill"></i> Featured
+                                    </span>
+                                </div>
+                                <div class="property-actions-overlay">
+                                    <a asp-controller="Wishlist" asp-action="Toggle" asp-route-propertyId="@property.Id" 
+                                       class="btn-action @(isWishlisted ? "active" : "")" title="Save to Wishlist">
+                                        <i class="bi @(isWishlisted ? "bi-heart-fill" : "bi-heart")"></i>
+                                    </a>
+                                    <a asp-controller="Comparison" asp-action="Add" asp-route-propertyId="@property.Id" 
+                                       class="btn-action @(isCompared ? "text-primary" : "")" title="Compare Property">
+                                        <i class="bi bi-arrow-left-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="p-3 d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="property-price">
+                                        $@property.Price.ToString("N0")
+                                        @if (property.ListingType == "Rent")
+                                        {
+                                            <small class="fs-6 text-muted fw-normal">/ month</small>
+                                        }
+                                    </span>
+                                    <span class="badge bg-light text-secondary border">@property.PropertyType</span>
+                                </div>
+
+                                <h5 class="fw-bold mb-1 text-truncate">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="text-dark text-decoration-none">
+                                        @property.Title
+                                    </a>
+                                </h5>
+
+                                <p class="text-muted small mb-3 text-truncate">
+                                    <i class="bi bi-geo-alt text-danger me-1"></i> @property.Address, @property.City, @property.State
+                                </p>
+
+                                <div class="d-flex justify-content-between py-2 border-top border-bottom mb-3 text-muted small">
+                                    <span class="property-meta-item"><i class="bi bi-door-closed text-primary"></i> @property.Bedrooms Beds</span>
+                                    <span class="property-meta-item"><i class="bi bi-droplet text-info"></i> @property.Bathrooms Baths</span>
+                                    <span class="property-meta-item"><i class="bi bi-bounding-box text-secondary"></i> @property.AreaSqFt.ToString("N0") sqft</span>
+                                </div>
+
+                                <div class="mt-auto d-flex gap-2">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-primary w-100 btn-sm fw-semibold">
+                                        View Details
+                                    </a>
+                                    <a asp-controller="Appointment" asp-action="Book" asp-route-propertyId="@property.Id" class="btn btn-outline-secondary btn-sm" title="Schedule Tour">
+                                        <i class="bi bi-calendar-event"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No featured properties found at this moment.</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Latest Listings Section -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
+            <div>
+                <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill fw-bold mb-2">New On Market</span>
+                <h2 class="fw-bold mb-0">Recently Added Listings</h2>
+            </div>
+            <a asp-controller="Property" asp-action="Index" class="btn btn-outline-primary mt-3 mt-md-0">
+                Explore All <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.LatestProperties != null && Model.LatestProperties.Any())
+            {
+                foreach (var property in Model.LatestProperties)
+                {
+                    var mainImage = property.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl 
+                                    ?? property.Images.FirstOrDefault()?.ImageUrl 
+                                    ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+                    var isWishlisted = Model.UserWishlistIds.Contains(property.Id);
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="property-card h-100 d-flex flex-column">
+                            <div class="property-image-wrapper">
+                                <img src="@mainImage" alt="@property.Title" />
+                                <div class="property-badge-type">
+                                    <span class="badge @(property.ListingType == "Sale" ? "bg-success" : "bg-info") shadow-sm px-2 py-1">
+                                        For @property.ListingType
+                                    </span>
+                                </div>
+                                <div class="property-actions-overlay">
+                                    <a asp-controller="Wishlist" asp-action="Toggle" asp-route-propertyId="@property.Id" 
+                                       class="btn-action @(isWishlisted ? "active" : "")" title="Save to Wishlist">
+                                        <i class="bi @(isWishlisted ? "bi-heart-fill" : "bi-heart")"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="p-3 d-flex flex-column flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="property-price">
+                                        $@property.Price.ToString("N0")
+                                        @if (property.ListingType == "Rent")
+                                        {
+                                            <small class="fs-6 text-muted fw-normal">/ mo</small>
+                                        }
+                                    </span>
+                                    <span class="badge bg-light text-secondary border">@property.PropertyType</span>
+                                </div>
+
+                                <h5 class="fw-bold mb-1 text-truncate">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="text-dark text-decoration-none">
+                                        @property.Title
+                                    </a>
+                                </h5>
+
+                                <p class="text-muted small mb-3 text-truncate">
+                                    <i class="bi bi-geo-alt text-danger me-1"></i> @property.City, @property.State
+                                </p>
+
+                                <div class="d-flex justify-content-between py-2 border-top border-bottom mb-3 text-muted small">
+                                    <span class="property-meta-item"><i class="bi bi-door-closed text-primary"></i> @property.Bedrooms Beds</span>
+                                    <span class="property-meta-item"><i class="bi bi-droplet text-info"></i> @property.Bathrooms Baths</span>
+                                    <span class="property-meta-item"><i class="bi bi-bounding-box text-secondary"></i> @property.AreaSqFt.ToString("N0") sqft</span>
+                                </div>
+
+                                <div class="mt-auto">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-primary w-100 btn-sm fw-semibold">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5">
+    <div class="container text-center">
+        <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill fw-bold mb-2">Our Commitments</span>
+        <h2 class="fw-bold mb-4">Why Real Estate Clients Trust Us</h2>
+
+        <div class="row g-4 text-start">
+            <div class="col-md-3">
+                <div class="p-4 bg-white rounded-4 border h-100 shadow-sm">
+                    <div class="stat-icon bg-primary text-white mb-3">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">100% Verified Listings</h5>
+                    <p class="text-muted small mb-0">Every property goes through strict administrative validation before being published.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-white rounded-4 border h-100 shadow-sm">
+                    <div class="stat-icon bg-info text-white mb-3">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Certified Agents</h5>
+                    <p class="text-muted small mb-0">Work directly with knowledgeable local real estate experts who guide you at every step.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-white rounded-4 border h-100 shadow-sm">
+                    <div class="stat-icon bg-success text-white mb-3">
+                        <i class="bi bi-calendar2-check"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Instant Tour Booking</h5>
+                    <p class="text-muted small mb-0">Schedule on-site property viewings directly with assigned agents in seconds.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-white rounded-4 border h-100 shadow-sm">
+                    <div class="stat-icon bg-warning text-dark mb-3">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Smart Comparisons</h5>
+                    <p class="text-muted small mb-0">Compare up to four properties side-by-side on price, square footage, amenities, and location.</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container py-4">
+        <h2 class="display-6 fw-bold mb-3">Looking to Sell or Lease Your Property?</h2>
+        <p class="lead text-white-50 mb-4 mx-auto" style="max-width: 650px;">
+            Reach thousands of active buyers and tenants. List your property today and let our certified agents assist you with negotiations and closing.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg text-primary fw-bold px-4">
+                <i class="bi bi-house-add me-1"></i> List Your Property
+            </a>
+            <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-telephone me-1"></i> Speak with an Agent
+            </a>
+        </div>
+    </div>
+</section>

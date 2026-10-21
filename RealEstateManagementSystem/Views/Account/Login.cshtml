@@ -1,0 +1,109 @@
+@model RealEstateManagementSystem.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-7 col-lg-5">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["InfoMessage"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i> @TempData["InfoMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+                <div class="display-6 fw-bold"><i class="bi bi-building"></i> RealEstate</div>
+                <p class="mb-0 text-white-50">Welcome back! Sign in to your account</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <form asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Email -->
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="name@example.com" type="email" id="loginEmail" />
+                        <label asp-for="Email"><i class="bi bi-envelope me-1"></i> Email Address</label>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-floating mb-3">
+                        <input asp-for="Password" class="form-control" placeholder="Password" type="password" id="loginPassword" />
+                        <label asp-for="Password"><i class="bi bi-lock me-1"></i> Password</label>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label text-muted small">Remember me</label>
+                        </div>
+                        <a asp-action="ForgotPassword" class="small text-decoration-none text-primary fw-semibold">Forgot password?</a>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Demo Credentials Helper -->
+                <div class="mt-4 p-3 bg-light rounded-3 border">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="fw-bold text-muted text-uppercase"><i class="bi bi-key-fill text-warning me-1"></i> Quick Demo Logins</small>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-sm btn-outline-dark w-100 text-start py-1" onclick="fillLogin('admin@@realestate.com', 'Admin@123456')">
+                                <span class="badge bg-danger me-1">Admin</span> <small class="text-truncate">admin@@realestate</small>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-sm btn-outline-dark w-100 text-start py-1" onclick="fillLogin('agent@@realestate.com', 'Agent@123456')">
+                                <span class="badge bg-info text-dark me-1">Agent</span> <small class="text-truncate">agent@@realestate</small>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-sm btn-outline-dark w-100 text-start py-1" onclick="fillLogin('seller@@realestate.com', 'Seller@123456')">
+                                <span class="badge bg-success me-1">Seller</span> <small class="text-truncate">seller@@realestate</small>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-sm btn-outline-dark w-100 text-start py-1" onclick="fillLogin('client@@realestate.com', 'Client@123456')">
+                                <span class="badge bg-primary me-1">Client</span> <small class="text-truncate">client@@realestate</small>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 pt-3 border-top">
+                    <p class="text-muted mb-0">
+                        Don't have an account yet?
+                        <a asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="fw-bold text-decoration-none text-primary">Register Now</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function fillLogin(email, password) {
+            document.getElementById('loginEmail').value = email;
+            document.getElementById('loginPassword').value = password;
+        }
+    </script>
+}
