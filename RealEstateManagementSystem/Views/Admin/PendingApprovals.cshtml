@@ -1,0 +1,112 @@
+@model List<RealEstateManagementSystem.Models.Property>
+@{
+    ViewData["Title"] = "Pending Property Approvals";
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-hourglass-split me-2"></i> Pending Property Approvals</h1>
+            <p class="text-white-50 mb-0">Review property listings submitted by sellers and agents before publishing them to the public catalog</p>
+        </div>
+        <div class="mt-3 mt-md-0">
+            <a asp-action="Dashboard" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    @if (Model != null && Model.Any())
+    {
+        <div class="alert alert-info d-flex align-items-center mb-4 shadow-sm" role="alert">
+            <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+            <div>
+                You have <strong>@Model.Count property listing(s)</strong> awaiting administrative review. Approved listings will immediately become visible to all buyers and tenants.
+            </div>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var property in Model)
+            {
+                var mainImage = property.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl 
+                                ?? property.Images.FirstOrDefault()?.ImageUrl 
+                                ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                        <div class="row g-0 h-100">
+                            <div class="col-md-5 position-relative">
+                                <img src="@mainImage" class="img-fluid h-100 w-100" style="object-fit: cover; min-height: 220px;" alt="@property.Title">
+                                <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 shadow-sm">
+                                    Pending Review
+                                </span>
+                            </div>
+                            <div class="col-md-7 d-flex flex-column p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="badge bg-light text-secondary border">@property.PropertyType</span>
+                                    <span class="fw-bold text-primary fs-5">$@property.Price.ToString("N0")</span>
+                                </div>
+
+                                <h5 class="fw-bold mb-1">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="text-dark text-decoration-none">
+                                        @property.Title
+                                    </a>
+                                </h5>
+
+                                <small class="text-muted mb-2">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i> @property.Address, @property.City, @property.State
+                                </small>
+
+                                <div class="small text-muted mb-3">
+                                    <span><i class="bi bi-person"></i> Seller: <strong>@(property.Seller?.FullName ?? "Owner")</strong></span><br />
+                                    <span><i class="bi bi-clock"></i> Submitted: @property.CreatedAt.ToString("MMM dd, yyyy h:mm tt")</span>
+                                </div>
+
+                                <p class="text-muted small text-truncate mb-3">@property.Description</p>
+
+                                <div class="mt-auto d-flex gap-2">
+                                    <!-- Approve Form -->
+                                    <form asp-action="ApproveProperty" method="post" class="flex-grow-1">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@property.Id" />
+                                        <button type="submit" class="btn btn-success btn-sm fw-bold w-100" onclick="return confirm('Approve and publish this property listing?');">
+                                            <i class="bi bi-check-lg me-1"></i> Approve
+                                        </button>
+                                    </form>
+
+                                    <!-- Reject Form -->
+                                    <form asp-action="RejectProperty" method="post" class="flex-grow-1">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@property.Id" />
+                                        <button type="submit" class="btn btn-outline-danger btn-sm fw-bold w-100" onclick="return confirm('Reject this property listing?');">
+                                            <i class="bi bi-x-lg me-1"></i> Reject
+                                        </button>
+                                    </form>
+
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-secondary btn-sm" title="Inspect">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
+            <div class="text-success mb-3"><i class="bi bi-check-circle-fill display-3"></i></div>
+            <h4 class="fw-bold">All Caught Up!</h4>
+            <p class="text-muted mb-4">There are currently no property listings pending administrative review.</p>
+            <div>
+                <a asp-action="Properties" class="btn btn-primary px-4 fw-bold">
+                    View Published Listings
+                </a>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,115 @@
+@model RealEstateManagementSystem.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Create an Account";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+                <div class="display-6 fw-bold"><i class="bi bi-building"></i> RealEstate</div>
+                <p class="mb-0 text-white-50">Join our real estate community today</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <h3 class="card-title fw-bold text-center mb-4 text-dark">Create Your Account</h3>
+
+                <form asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Role Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">I am joining as a:</label>
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <input type="radio" class="btn-check" name="Role" id="roleClient" value="Client" @(Model.Role == "Client" ? "checked" : "") autocomplete="off">
+                                <label class="btn btn-outline-primary w-100 py-2 d-flex flex-column align-items-center" for="roleClient">
+                                    <i class="bi bi-person fs-4 mb-1"></i>
+                                    <span class="small fw-semibold">Client / Buyer</span>
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <input type="radio" class="btn-check" name="Role" id="roleSeller" value="Seller" @(Model.Role == "Seller" ? "checked" : "") autocomplete="off">
+                                <label class="btn btn-outline-primary w-100 py-2 d-flex flex-column align-items-center" for="roleSeller">
+                                    <i class="bi bi-house-door fs-4 mb-1"></i>
+                                    <span class="small fw-semibold">Seller / Owner</span>
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <input type="radio" class="btn-check" name="Role" id="roleAgent" value="Agent" @(Model.Role == "Agent" ? "checked" : "") autocomplete="off">
+                                <label class="btn btn-outline-primary w-100 py-2 d-flex flex-column align-items-center" for="roleAgent">
+                                    <i class="bi bi-briefcase fs-4 mb-1"></i>
+                                    <span class="small fw-semibold">Real Estate Agent</span>
+                                </label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Role" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Full Name -->
+                    <div class="form-floating mb-3">
+                        <input asp-for="FullName" class="form-control" placeholder="John Doe" />
+                        <label asp-for="FullName"><i class="bi bi-person me-1"></i> Full Name</label>
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="name@example.com" type="email" />
+                        <label asp-for="Email"><i class="bi bi-envelope me-1"></i> Email Address</label>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="form-floating mb-3">
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="+1234567890" />
+                        <label asp-for="PhoneNumber"><i class="bi bi-telephone me-1"></i> Phone Number (Optional)</label>
+                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-floating mb-3">
+                        <input asp-for="Address" class="form-control" placeholder="City, State" />
+                        <label asp-for="Address"><i class="bi bi-geo-alt me-1"></i> Address (Optional)</label>
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <!-- Password -->
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input asp-for="Password" class="form-control" placeholder="Password" />
+                                <label asp-for="Password"><i class="bi bi-lock me-1"></i> Password</label>
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <!-- Confirm Password -->
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                                <label asp-for="ConfirmPassword"><i class="bi bi-shield-lock me-1"></i> Confirm</label>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                            <i class="bi bi-person-plus me-2"></i> Register Now
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4 pt-3 border-top">
+                    <p class="text-muted mb-0">
+                        Already have an account?
+                        <a asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="fw-bold text-decoration-none text-primary">Sign In</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

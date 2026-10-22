@@ -1,0 +1,250 @@
+@model RealEstateManagementSystem.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Agent Dashboard";
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-briefcase-fill me-2"></i> Agent Workspace</h1>
+            <p class="text-white-50 mb-0">Welcome back, @Model.UserName! Manage your assigned listings, client appointments, and inquiries</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a asp-controller="Property" asp-action="Create" class="btn btn-light text-primary fw-bold">
+                <i class="bi bi-plus-circle-fill me-1"></i> List New Property
+            </a>
+            <a asp-controller="Profile" asp-action="Index" class="btn btn-outline-light">
+                <i class="bi bi-person-gear me-1"></i> My Profile
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Stat Counter Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Assigned Listings</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">@Model.AssignedPropertiesCount</h3>
+                    </div>
+                    <div class="stat-icon bg-primary text-white">
+                        <i class="bi bi-buildings"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Pending Tours</span>
+                        <h3 class="fw-bold text-warning mt-1 mb-0">@Model.PendingAppointmentsCount</h3>
+                    </div>
+                    <div class="stat-icon bg-warning text-dark">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Confirmed Tours</span>
+                        <h3 class="fw-bold text-success mt-1 mb-0">@Model.ConfirmedAppointmentsCount</h3>
+                    </div>
+                    <div class="stat-icon bg-success text-white">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Client Inquiries</span>
+                        <h3 class="fw-bold text-info mt-1 mb-0">@Model.TotalInquiries</h3>
+                    </div>
+                    <div class="stat-icon bg-info text-white">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointments Management Table -->
+    <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0"><i class="bi bi-calendar-week text-primary me-2"></i> Client Viewing Appointments</h5>
+            <a asp-controller="Appointment" asp-action="Index" class="small text-primary text-decoration-none fw-semibold">View All</a>
+        </div>
+
+        @if (Model.RecentAppointments.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr class="small text-muted">
+                            <th>Property</th>
+                            <th>Client Info</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                            <th class="text-end">Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var appt in Model.RecentAppointments)
+                        {
+                            <tr>
+                                <td>
+                                    <strong class="text-dark d-block">@(appt.Property?.Title ?? "Property")</strong>
+                                    <small class="text-muted">@(appt.Property?.Address), @(appt.Property?.City)</small>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@(appt.Client?.FullName ?? "Client")</div>
+                                    <small class="text-muted d-block">@appt.Client?.Email</small>
+                                    <small class="text-muted d-block">@appt.Client?.PhoneNumber</small>
+                                </td>
+                                <td class="small text-dark fw-semibold">
+                                    <i class="bi bi-calendar3 me-1 text-primary"></i> @appt.AppointmentDate.ToString("MMM dd, yyyy")<br />
+                                    <i class="bi bi-clock me-1 text-info"></i> @appt.AppointmentDate.ToString("h:mm tt")
+                                </td>
+                                <td>
+                                    <span class="badge @(appt.Status switch { "Confirmed" => "bg-success", "Completed" => "bg-primary", "Cancelled" => "bg-danger", _ => "bg-warning text-dark" })">
+                                        @appt.Status
+                                    </span>
+                                </td>
+                                <td class="small text-muted" style="max-width: 200px;">
+                                    @(string.IsNullOrEmpty(appt.Notes) ? "None" : appt.Notes)
+                                </td>
+                                <td class="text-end">
+                                    <form asp-action="UpdateAppointmentStatus" method="post" class="d-inline-flex gap-1 justify-content-end">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="appointmentId" value="@appt.Id" />
+                                        <select name="status" class="form-select form-select-sm" style="width: 120px;" onchange="this.form.submit()">
+                                            <option value="Pending" selected="@(appt.Status == "Pending")">Pending</option>
+                                            <option value="Confirmed" selected="@(appt.Status == "Confirmed")">Confirm</option>
+                                            <option value="Completed" selected="@(appt.Status == "Completed")">Completed</option>
+                                            <option value="Cancelled" selected="@(appt.Status == "Cancelled")">Cancel</option>
+                                        </select>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted py-3 mb-0 text-center">No client viewing appointments scheduled at this time.</p>
+        }
+    </div>
+
+    <!-- Assigned Properties Grid & Inquiries -->
+    <div class="row g-4">
+        <!-- Assigned Listings -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-building-check text-info me-2"></i> My Assigned Properties</h5>
+                    <span class="badge bg-light text-muted border">@Model.AssignedPropertiesCount Total</span>
+                </div>
+
+                @if (Model.RecentProperties.Any())
+                {
+                    <div class="d-flex flex-column gap-3">
+                        @foreach (var p in Model.RecentProperties)
+                        {
+                            var img = p.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl ?? p.Images.FirstOrDefault()?.ImageUrl ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+
+                            <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 border">
+                                <img src="@img" class="rounded-3" style="width: 80px; height: 60px; object-fit: cover;" alt="@p.Title">
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-1">
+                                        <a asp-controller="Property" asp-action="Details" asp-route-id="@p.Id" class="text-dark text-decoration-none">
+                                            @p.Title
+                                        </a>
+                                    </h6>
+                                    <div class="small text-primary fw-bold">$@p.Price.ToString("N0") &middot; <span class="badge bg-secondary">@p.PropertyType</span></div>
+                                    <small class="text-muted"><i class="bi bi-geo-alt"></i> @p.City, @p.State</small>
+                                </div>
+                                <div>
+                                    <a asp-controller="Property" asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-outline-primary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted py-3 mb-0 text-center">No properties currently assigned to you.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Inquiries from Prospective Buyers -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-chat-left-dots text-primary me-2"></i> Client Inquiries</h5>
+                    <a asp-controller="Inquiry" asp-action="Index" class="small text-primary text-decoration-none fw-semibold">View All</a>
+                </div>
+
+                @if (Model.RecentInquiries.Any())
+                {
+                    <div class="d-flex flex-column gap-3">
+                        @foreach (var inq in Model.RecentInquiries)
+                        {
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div>
+                                        <strong class="text-dark small d-block">@inq.Subject</strong>
+                                        <small class="text-muted">Property: <strong>@(inq.Property?.Title ?? "Listing")</strong></small>
+                                    </div>
+                                    <span class="badge @(inq.Status == "Responded" ? "bg-success" : "bg-warning text-dark")">
+                                        @inq.Status
+                                    </span>
+                                </div>
+                                <p class="text-secondary small mb-2 fst-italic">"@inq.Message"</p>
+
+                                @if (!string.IsNullOrEmpty(inq.Response))
+                                {
+                                    <div class="p-2 bg-white rounded border small mb-2 text-muted">
+                                        <strong>Your Response:</strong> @inq.Response
+                                    </div>
+                                }
+                                else
+                                {
+                                    <form asp-action="RespondInquiry" method="post" class="mt-2">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="inquiryId" value="@inq.Id" />
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" name="response" class="form-control" placeholder="Write response to client..." required />
+                                            <button type="submit" class="btn btn-primary fw-semibold">Reply</button>
+                                        </div>
+                                    </form>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted py-3 mb-0 text-center">No inquiries received yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

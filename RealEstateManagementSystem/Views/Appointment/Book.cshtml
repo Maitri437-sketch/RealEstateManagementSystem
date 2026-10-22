@@ -1,0 +1,88 @@
+@model RealEstateManagementSystem.ViewModels.AppointmentViewModel
+@{
+    ViewData["Title"] = "Schedule a Tour - " + Model.PropertyTitle;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-primary text-white p-4 rounded-top-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="h3 fw-bold mb-1"><i class="bi bi-calendar2-check me-2"></i> Schedule a Viewing Tour</h2>
+                            <p class="mb-0 text-white-50">Choose a convenient date and time to visit this property with an agent</p>
+                        </div>
+                        <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.PropertyId" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Property
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <!-- Property Summary Widget -->
+                    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-4 border mb-4">
+                        @if (!string.IsNullOrEmpty(Model.PropertyImageUrl))
+                        {
+                            <img src="@Model.PropertyImageUrl" class="rounded-3" style="width: 100px; height: 75px; object-fit: cover;" alt="Property">
+                        }
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">@Model.PropertyTitle</h5>
+                            <div class="text-primary fw-bold fs-5 mb-1">$@Model.PropertyPrice.ToString("N0")</div>
+                            <small class="text-muted"><i class="bi bi-geo-alt"></i> @Model.PropertyAddress</small>
+                        </div>
+                    </div>
+
+                    <form asp-action="Book" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="PropertyId" />
+                        <input type="hidden" asp-for="PropertyTitle" />
+                        <input type="hidden" asp-for="PropertyAddress" />
+                        <input type="hidden" asp-for="PropertyPrice" />
+                        <input type="hidden" asp-for="PropertyImageUrl" />
+                        <input type="hidden" asp-for="AgentId" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Date and Time Picker -->
+                        <div class="mb-4">
+                            <label asp-for="AppointmentDate" class="form-label fw-bold">Preferred Tour Date & Time <span class="text-danger">*</span></label>
+                            <input asp-for="AppointmentDate" class="form-control form-control-lg" type="datetime-local" />
+                            <small class="text-muted d-block mt-1">Select a future date during business hours (Mon&ndash;Sat, 9 AM to 6 PM).</small>
+                            <span asp-validation-for="AppointmentDate" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="mb-4">
+                            <label asp-for="Notes" class="form-label fw-bold small">Notes / Questions for the Agent (Optional)</label>
+                            <textarea asp-for="Notes" class="form-control" rows="4" placeholder="Let the agent know if you have specific timing constraints, questions about mortgage approval, parking, or accessibility requirements..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Representative info -->
+                        <div class="p-3 bg-light rounded-3 border mb-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-person-badge text-primary fs-4"></i>
+                                <div>
+                                    <small class="text-muted d-block">Listing Representative</small>
+                                    <strong class="text-dark">@Model.AgentName</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                            <a asp-controller="Property" asp-action="Details" asp-route-id="@Model.PropertyId" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-4">
+                                <i class="bi bi-check2-circle me-1"></i> Request Appointment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

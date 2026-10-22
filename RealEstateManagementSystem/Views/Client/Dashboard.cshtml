@@ -1,0 +1,257 @@
+@model RealEstateManagementSystem.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Client Dashboard";
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-person-circle me-2"></i> Client Workspace</h1>
+            <p class="text-white-50 mb-0">Welcome back, @Model.UserName! Track your saved properties, scheduled viewings, and agent conversations</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a asp-controller="Property" asp-action="Index" class="btn btn-light text-primary fw-bold">
+                <i class="bi bi-search me-1"></i> Browse Properties
+            </a>
+            <a asp-controller="Wishlist" asp-action="Index" class="btn btn-outline-light">
+                <i class="bi bi-heart-fill me-1"></i> Wishlist (@Model.WishlistCount)
+            </a>
+            <a asp-controller="Comparison" asp-action="Index" class="btn btn-outline-light">
+                <i class="bi bi-arrow-left-right me-1"></i> Comparisons (@Model.ComparisonsCount)
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Stat Counter Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Saved to Wishlist</span>
+                        <h3 class="fw-bold text-danger mt-1 mb-0">@Model.WishlistCount</h3>
+                    </div>
+                    <div class="stat-icon bg-danger text-white">
+                        <i class="bi bi-heart"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small">
+                    <a asp-controller="Wishlist" asp-action="Index" class="text-danger text-decoration-none fw-semibold">
+                        View wishlist <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Scheduled Tours</span>
+                        <h3 class="fw-bold text-primary mt-1 mb-0">@Model.TotalAppointments</h3>
+                    </div>
+                    <div class="stat-icon bg-primary text-white">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small text-muted">
+                    <span class="text-success fw-bold">@Model.ConfirmedAppointmentsCount Confirmed</span> &middot;
+                    <span class="text-warning fw-bold">@Model.PendingAppointmentsCount Pending</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Inquiries Sent</span>
+                        <h3 class="fw-bold text-info mt-1 mb-0">@Model.TotalInquiries</h3>
+                    </div>
+                    <div class="stat-icon bg-info text-white">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small">
+                    <a asp-controller="Inquiry" asp-action="Index" class="text-info text-decoration-none fw-semibold">
+                        View messages <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Comparisons</span>
+                        <h3 class="fw-bold text-success mt-1 mb-0">@Model.ComparisonsCount</h3>
+                    </div>
+                    <div class="stat-icon bg-success text-white">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small">
+                    <a asp-controller="Comparison" asp-action="Index" class="text-success text-decoration-none fw-semibold">
+                        Compare properties <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Section -->
+    @if (Model.Notifications.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-bell-fill text-warning me-2"></i> Recent Updates & Notifications
+                    @if (Model.UnreadNotificationsCount > 0)
+                    {
+                        <span class="badge bg-danger rounded-pill ms-2">@Model.UnreadNotificationsCount New</span>
+                    }
+                </h5>
+                @if (Model.UnreadNotificationsCount > 0)
+                {
+                    <form asp-action="MarkAllNotificationsRead" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-check2-all me-1"></i> Mark All as Read
+                        </button>
+                    </form>
+                }
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+                @foreach (var n in Model.Notifications)
+                {
+                    <div class="p-3 rounded-3 border d-flex justify-content-between align-items-center @(n.IsRead ? "bg-white" : "bg-primary-subtle border-primary-subtle")">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <strong class="text-dark small">@n.Title</strong>
+                                @if (!n.IsRead)
+                                {
+                                    <span class="badge bg-primary small">New</span>
+                                }
+                                <small class="text-muted">&middot; @n.CreatedAt.ToString("MMM dd, h:mm tt")</small>
+                            </div>
+                            <p class="text-secondary small mb-0">@n.Message</p>
+                        </div>
+                        <div class="d-flex gap-2 align-items-center">
+                            @if (!string.IsNullOrEmpty(n.LinkUrl))
+                            {
+                                <a href="@n.LinkUrl" class="btn btn-sm btn-outline-primary">View</a>
+                            }
+                            @if (!n.IsRead)
+                            {
+                                <form asp-action="MarkNotificationRead" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@n.Id" />
+                                    <button type="submit" class="btn btn-sm btn-link text-muted" title="Mark read">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Scheduled Tours & Inquiries Grid -->
+    <div class="row g-4 mb-4">
+        <!-- Scheduled Tours -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-calendar2-check text-primary me-2"></i> My Booked Tours</h5>
+                    <a asp-controller="Appointment" asp-action="Index" class="small text-primary text-decoration-none fw-semibold">View All</a>
+                </div>
+
+                @if (Model.RecentAppointments.Any())
+                {
+                    <div class="d-flex flex-column gap-3">
+                        @foreach (var appt in Model.RecentAppointments)
+                        {
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <h6 class="fw-bold text-dark mb-0">@(appt.Property?.Title ?? "Property Tour")</h6>
+                                    <span class="badge @(appt.Status switch { "Confirmed" => "bg-success", "Completed" => "bg-primary", "Cancelled" => "bg-danger", _ => "bg-warning text-dark" })">
+                                        @appt.Status
+                                    </span>
+                                </div>
+                                <small class="text-muted d-block mb-2">
+                                    <i class="bi bi-geo-alt"></i> @appt.Property?.Address, @appt.Property?.City
+                                </small>
+                                <div class="small text-dark mb-1">
+                                    <i class="bi bi-calendar3 text-primary"></i> <strong>@appt.AppointmentDate.ToString("MMMM dd, yyyy")</strong> at <strong>@appt.AppointmentDate.ToString("h:mm tt")</strong>
+                                </div>
+                                <div class="small text-muted">
+                                    Assigned Agent: <strong>@(appt.Agent?.FullName ?? "Assigned upon confirmation")</strong>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="bi bi-calendar-x text-muted display-4 mb-2 d-block"></i>
+                        <p class="text-muted small mb-3">You haven't scheduled any property tours yet.</p>
+                        <a asp-controller="Property" asp-action="Index" class="btn btn-outline-primary btn-sm fw-semibold">
+                            Find Properties to Tour
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Inquiries Sent -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-chat-square-dots text-info me-2"></i> My Questions & Inquiries</h5>
+                    <a asp-controller="Inquiry" asp-action="Index" class="small text-primary text-decoration-none fw-semibold">View All</a>
+                </div>
+
+                @if (Model.RecentInquiries.Any())
+                {
+                    <div class="d-flex flex-column gap-3">
+                        @foreach (var inq in Model.RecentInquiries)
+                        {
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <strong class="text-dark small">@inq.Subject</strong>
+                                    <span class="badge @(inq.Status == "Responded" ? "bg-success" : "bg-warning text-dark")">
+                                        @inq.Status
+                                    </span>
+                                </div>
+                                <small class="text-muted d-block mb-2">Regarding: <strong>@inq.Property?.Title</strong></small>
+                                <p class="text-secondary small mb-2 fst-italic">"@inq.Message"</p>
+
+                                @if (!string.IsNullOrEmpty(inq.Response))
+                                {
+                                    <div class="p-2 bg-success-subtle text-success-emphasis rounded border border-success-subtle small">
+                                        <strong>Agent Reply:</strong> @inq.Response
+                                        <small class="d-block text-muted mt-1">@inq.RespondedAt?.ToString("MMM dd, yyyy h:mm tt")</small>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="bi bi-chat-left text-muted display-4 mb-2 d-block"></i>
+                        <p class="text-muted small mb-0">No active property inquiries sent.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

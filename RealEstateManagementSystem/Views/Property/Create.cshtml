@@ -1,0 +1,173 @@
+@model RealEstateManagementSystem.ViewModels.PropertyViewModel
+@{
+    ViewData["Title"] = "List New Property";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-primary text-white p-4 rounded-top-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="h3 fw-bold mb-1"><i class="bi bi-house-add me-2"></i> List New Property</h2>
+                            <p class="mb-0 text-white-50">Fill in the property specifications, upload photos, and submit for review</p>
+                        </div>
+                        <a asp-action="Index" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Listings
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Basic Details Section -->
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">1. Basic Information</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <label asp-for="Title" class="form-label fw-bold small">Property Title <span class="text-danger">*</span></label>
+                                <input asp-for="Title" class="form-control" placeholder="e.g. Modern Sunset Villa with Infinity Pool" />
+                                <span asp-validation-for="Title" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PropertyType" class="form-label fw-bold small">Property Category <span class="text-danger">*</span></label>
+                                <select asp-for="PropertyType" class="form-select">
+                                    <option value="House">House (Single-Family)</option>
+                                    <option value="Apartment">Apartment</option>
+                                    <option value="Villa">Luxury Villa</option>
+                                    <option value="Condo">Condominium</option>
+                                    <option value="Commercial">Commercial Property</option>
+                                </select>
+                                <span asp-validation-for="PropertyType" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ListingType" class="form-label fw-bold small">Listing Offer <span class="text-danger">*</span></label>
+                                <select asp-for="ListingType" class="form-select">
+                                    <option value="Sale">For Sale</option>
+                                    <option value="Rent">For Rent</option>
+                                </select>
+                                <span asp-validation-for="ListingType" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="form-label fw-bold small">Price ($) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="e.g. 450000" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="AreaSqFt" class="form-label fw-bold small">Area (Square Feet) <span class="text-danger">*</span></label>
+                                <input asp-for="AreaSqFt" type="number" class="form-control" placeholder="e.g. 2400" />
+                                <span asp-validation-for="AreaSqFt" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label fw-bold small">Detailed Description <span class="text-danger">*</span></label>
+                                <textarea asp-for="Description" class="form-control" rows="5" placeholder="Highlight key selling points, neighborhood amenities, interior finishes, parking, security, etc..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Location Section -->
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">2. Location Details</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <label asp-for="Address" class="form-label fw-bold small">Street Address <span class="text-danger">*</span></label>
+                                <input asp-for="Address" class="form-control" placeholder="e.g. 742 Evergreen Terrace" />
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="City" class="form-label fw-bold small">City <span class="text-danger">*</span></label>
+                                <input asp-for="City" class="form-control" placeholder="e.g. Springfield" />
+                                <span asp-validation-for="City" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="State" class="form-label fw-bold small">State / Province <span class="text-danger">*</span></label>
+                                <input asp-for="State" class="form-control" placeholder="e.g. OR" />
+                                <span asp-validation-for="State" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="ZipCode" class="form-label fw-bold small">Zip / Postal Code <span class="text-danger">*</span></label>
+                                <input asp-for="ZipCode" class="form-control" placeholder="e.g. 97477" />
+                                <span asp-validation-for="ZipCode" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Amenities & Dimensions -->
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">3. Specifications & Architecture</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label asp-for="Bedrooms" class="form-label fw-bold small">Bedrooms</label>
+                                <input asp-for="Bedrooms" type="number" class="form-control" />
+                                <span asp-validation-for="Bedrooms" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Bathrooms" class="form-label fw-bold small">Bathrooms</label>
+                                <input asp-for="Bathrooms" type="number" class="form-control" />
+                                <span asp-validation-for="Bathrooms" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="YearBuilt" class="form-label fw-bold small">Year Built (Optional)</label>
+                                <input asp-for="YearBuilt" type="number" class="form-control" placeholder="e.g. 2021" />
+                                <span asp-validation-for="YearBuilt" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Image Uploads -->
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">4. Property Photos</h5>
+                        <div class="mb-4">
+                            <label asp-for="Images" class="form-label fw-bold small">Upload Photos (Supported: .jpg, .png, .webp &ndash; max 10MB each)</label>
+                            <input asp-for="Images" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                            <small class="text-muted d-block mt-1">Select one or multiple images. The first image uploaded will serve as the primary listing photo.</small>
+                            <span asp-validation-for="Images" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Admin Only Settings -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">5. Administrative Controls</h5>
+                            <div class="row g-3 mb-4 p-3 bg-light rounded-3 border">
+                                <div class="col-md-6">
+                                    <label asp-for="AgentId" class="form-label fw-bold small">Assign Agent</label>
+                                    <select asp-for="AgentId" asp-items="Model.Agents" class="form-select">
+                                        <option value="">-- No Agent Assigned --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="form-check mt-3">
+                                        <input asp-for="IsFeatured" class="form-check-input" />
+                                        <label asp-for="IsFeatured" class="form-check-label fw-semibold">Feature on Homepage</label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-4">
+                                <i class="bi bi-check2-circle me-1"></i> Submit Property
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

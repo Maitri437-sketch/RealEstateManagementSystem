@@ -1,0 +1,100 @@
+@model List<RealEstateManagementSystem.Models.Property>
+@{
+    ViewData["Title"] = "My Property Listings";
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-houses-fill me-2"></i> My Property Portfolio</h1>
+            <p class="text-white-50 mb-0">Track all your submitted properties, review feedback, and manage listings</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a asp-controller="Property" asp-action="Create" class="btn btn-light text-primary fw-bold">
+                <i class="bi bi-plus-circle-fill me-1"></i> Add Property
+            </a>
+            <a asp-action="Dashboard" class="btn btn-outline-light">
+                <i class="bi bi-arrow-left me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr class="small text-muted">
+                            <th>Property</th>
+                            <th>Category</th>
+                            <th>Offer</th>
+                            <th>Price</th>
+                            <th>Approval Status</th>
+                            <th>Assigned Agent</th>
+                            <th>Created On</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var property in Model)
+                        {
+                            var img = property.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl ?? property.Images.FirstOrDefault()?.ImageUrl ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@img" class="rounded-3" style="width: 70px; height: 50px; object-fit: cover;" alt="@property.Title">
+                                        <div>
+                                            <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="fw-bold text-dark text-decoration-none">
+                                                @property.Title
+                                            </a>
+                                            <small class="text-muted d-block"><i class="bi bi-geo-alt"></i> @property.City, @property.State</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-light text-dark border">@property.PropertyType</span></td>
+                                <td><span class="badge @(property.ListingType == "Sale" ? "bg-success" : "bg-info")">For @property.ListingType</span></td>
+                                <td class="fw-bold text-primary">$@property.Price.ToString("N0")</td>
+                                <td>
+                                    <span class="badge @(property.Status switch { "Approved" => "bg-success", "Pending" => "bg-warning text-dark", "Rejected" => "bg-danger", _ => "bg-secondary" })">
+                                        @property.Status
+                                    </span>
+                                </td>
+                                <td class="small text-muted">
+                                    @(property.Agent != null ? property.Agent.FullName : "Pending Assignment")
+                                </td>
+                                <td class="small text-muted">@property.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-secondary" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-controller="Property" asp-action="Edit" asp-route-id="@property.Id" class="btn btn-outline-primary" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-controller="Property" asp-action="Delete" asp-route-id="@property.Id" class="btn btn-outline-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-houses display-4 text-muted mb-2"></i>
+                <p class="text-muted mb-3">You haven't listed any properties yet.</p>
+                <a asp-controller="Property" asp-action="Create" class="btn btn-primary fw-bold">
+                    <i class="bi bi-plus-circle me-1"></i> Create Your First Listing
+                </a>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,108 @@
+@model List<RealEstateManagementSystem.Models.Wishlist>
+@{
+    ViewData["Title"] = "My Saved Properties";
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-heart-fill text-danger me-2"></i> Saved Wishlist</h1>
+            <p class="text-white-50 mb-0">Review and track your favorite homes and property listings</p>
+        </div>
+        <div class="mt-3 mt-md-0">
+            <a asp-controller="Property" asp-action="Index" class="btn btn-light text-primary fw-bold">
+                <i class="bi bi-plus-circle me-1"></i> Browse More Properties
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                var property = item.Property;
+                if (property == null) continue;
+
+                var mainImage = property.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl
+                                ?? property.Images.FirstOrDefault()?.ImageUrl
+                                ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="property-card h-100 d-flex flex-column">
+                        <div class="property-image-wrapper">
+                            <img src="@mainImage" alt="@property.Title" />
+                            <div class="property-badge-type">
+                                <span class="badge @(property.ListingType == "Sale" ? "bg-success" : "bg-info") shadow-sm px-2 py-1">
+                                    For @property.ListingType
+                                </span>
+                            </div>
+                            <div class="property-actions-overlay">
+                                <form asp-action="Remove" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="propertyId" value="@property.Id" />
+                                    <button type="submit" class="btn-action active" title="Remove from Wishlist">
+                                        <i class="bi bi-heart-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="property-price">
+                                    $@property.Price.ToString("N0")
+                                    @if (property.ListingType == "Rent")
+                                    {
+                                        <small class="fs-6 text-muted fw-normal">/ mo</small>
+                                    }
+                                </span>
+                                <span class="badge bg-light text-secondary border">@property.PropertyType</span>
+                            </div>
+
+                            <h5 class="fw-bold mb-1 text-truncate">
+                                <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="text-dark text-decoration-none">
+                                    @property.Title
+                                </a>
+                            </h5>
+
+                            <p class="text-muted small mb-3 text-truncate">
+                                <i class="bi bi-geo-alt text-danger me-1"></i> @property.Address, @property.City
+                            </p>
+
+                            <div class="d-flex justify-content-between py-2 border-top border-bottom mb-3 text-muted small">
+                                <span class="property-meta-item"><i class="bi bi-door-closed text-primary"></i> @property.Bedrooms Beds</span>
+                                <span class="property-meta-item"><i class="bi bi-droplet text-info"></i> @property.Bathrooms Baths</span>
+                                <span class="property-meta-item"><i class="bi bi-bounding-box text-secondary"></i> @property.AreaSqFt.ToString("N0") sqft</span>
+                            </div>
+
+                            <div class="mt-auto d-flex gap-2">
+                                <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-primary w-100 btn-sm fw-semibold">
+                                    View Details
+                                </a>
+                                <a asp-controller="Appointment" asp-action="Book" asp-route-propertyId="@property.Id" class="btn btn-outline-secondary btn-sm" title="Schedule Tour">
+                                    <i class="bi bi-calendar-event"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
+            <i class="bi bi-heart display-3 text-muted mb-3 d-block"></i>
+            <h4 class="fw-bold">Your Wishlist is Empty</h4>
+            <p class="text-muted mb-4">You haven't saved any properties to your favorites yet. Start exploring listings and click the heart icon to save them!</p>
+            <div>
+                <a asp-controller="Property" asp-action="Index" class="btn btn-primary fw-semibold px-4">
+                    <i class="bi bi-grid me-1"></i> Browse Properties
+                </a>
+            </div>
+        </div>
+    }
+</div>

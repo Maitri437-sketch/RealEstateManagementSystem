@@ -1,0 +1,96 @@
+@model List<RealEstateManagementSystem.Models.Review>
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Property Reviews";
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var isAdmin = User.IsInRole("Admin");
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-star-fill text-warning me-2"></i> Client Reviews & Ratings</h1>
+            <p class="text-white-50 mb-0">Feedback and star ratings left by clients across property listings</p>
+        </div>
+        <div class="mt-3 mt-md-0">
+            <a asp-controller="Property" asp-action="Index" class="btn btn-light text-primary fw-bold">
+                <i class="bi bi-search me-1"></i> Browse Properties
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr class="small text-muted">
+                            <th>Property</th>
+                            <th>Client</th>
+                            <th>Rating</th>
+                            <th>Comment</th>
+                            <th>Date</th>
+                            @if (isAdmin)
+                            {
+                                <th class="text-end">Actions</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var review in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@review.PropertyId" class="fw-bold text-dark text-decoration-none">
+                                        @(review.Property?.Title ?? "Property Listing")
+                                    </a>
+                                    <small class="text-muted d-block"><i class="bi bi-geo-alt"></i> @(review.Property?.City), @(review.Property?.State)</small>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold text-dark">@(review.Client?.FullName ?? "Client")</div>
+                                    <small class="text-muted">@review.Client?.Email</small>
+                                </td>
+                                <td>
+                                    <span class="star-rating">
+                                        @for (int s = 1; s <= 5; s++)
+                                        {
+                                            <i class="bi @(s <= review.Rating ? "bi-star-fill" : "bi-star")"></i>
+                                        }
+                                    </span>
+                                    <span class="small fw-bold ms-1">(@review.Rating/5)</span>
+                                </td>
+                                <td class="small text-secondary" style="max-width: 300px;">
+                                    "@review.Comment"
+                                </td>
+                                <td class="small text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                @if (isAdmin || review.ClientId == currentUserId)
+                                {
+                                    <td class="text-end">
+                                        <form asp-action="Delete" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@review.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this review?');" title="Delete Review">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-star display-4 text-muted mb-2 d-block"></i>
+                <h5 class="fw-bold">No Reviews Recorded Yet</h5>
+                <p class="text-muted mb-0">Ratings and comments submitted by buyers and tenants will appear here.</p>
+            </div>
+        }
+    </div>
+</div>

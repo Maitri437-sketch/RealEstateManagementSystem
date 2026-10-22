@@ -1,0 +1,49 @@
+@model RealEstateManagementSystem.Models.Property
+@{
+    ViewData["Title"] = "Delete Property Listing";
+    var mainImage = Model.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl 
+                    ?? Model.Images.FirstOrDefault()?.ImageUrl 
+                    ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-danger shadow-lg rounded-4">
+                <div class="card-header bg-danger text-white p-4 rounded-top-4 text-center">
+                    <i class="bi bi-exclamation-triangle display-4 mb-2 d-block"></i>
+                    <h3 class="fw-bold mb-1">Confirm Property Deletion</h3>
+                    <p class="mb-0 text-white-50">This action is permanent and cannot be undone.</p>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 border mb-4">
+                        <img src="@mainImage" alt="@Model.Title" class="rounded-3" style="width: 100px; height: 80px; object-fit: cover;" />
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">@Model.Title</h5>
+                            <div class="text-primary fw-bold fs-5 mb-1">$@Model.Price.ToString("N0")</div>
+                            <small class="text-muted"><i class="bi bi-geo-alt"></i> @Model.Address, @Model.City, @Model.State</small>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning small mb-4">
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        Deleting this listing will also remove associated appointments, inquiries, photos, reviews, and wishlist entries.
+                    </div>
+
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary px-4">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-lg fw-bold px-4">
+                                <i class="bi bi-trash-fill me-1"></i> Delete Permanently
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
