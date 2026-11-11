@@ -1,0 +1,260 @@
+@model RealEstateManagementSystem.ViewModels.ReportsViewModel
+@{
+    ViewData["Title"] = "System Analytics & Reports";
+    var apptSuccessRate = Model.TotalAppointments > 0 ? (double)(Model.ConfirmedAppointments + Model.CompletedAppointments) / Model.TotalAppointments * 100 : 0;
+    var inquiryResponseRate = Model.TotalInquiries > 0 ? (double)Model.RespondedInquiries / Model.TotalInquiries * 100 : 0;
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-bar-chart-fill me-2"></i> System Analytics & Reports</h1>
+            <p class="text-white-50 mb-0">Executive summary of portfolio valuation, user demographics, tours, and inquiries</p>
+        </div>
+        <div class="mt-3 mt-md-0 d-flex gap-2">
+            <button class="btn btn-light text-primary fw-bold" onclick="window.print()">
+                <i class="bi bi-printer me-1"></i> Print Report
+            </button>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-outline-light">
+                    <i class="bi bi-speedometer2 me-1"></i> Admin Dashboard
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Top KPI Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Portfolio Valuation</span>
+                        <h4 class="fw-bold text-primary mt-1 mb-0">$@Model.TotalPortfolioValue.ToString("N0")</h4>
+                    </div>
+                    <div class="stat-icon bg-primary text-white">
+                        <i class="bi bi-currency-dollar"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small text-muted">
+                    <span>Avg Price: <strong>$@Model.AveragePropertyPrice.ToString("N0")</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Total Properties</span>
+                        <h4 class="fw-bold text-dark mt-1 mb-0">@Model.TotalProperties</h4>
+                    </div>
+                    <div class="stat-icon bg-success text-white">
+                        <i class="bi bi-buildings"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small text-muted">
+                    <span class="text-success fw-bold">@Model.ApprovedProperties Approved</span> &middot;
+                    <span class="text-warning fw-bold">@Model.PendingProperties Pending</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Active User Base</span>
+                        <h4 class="fw-bold text-dark mt-1 mb-0">@Model.TotalUsers</h4>
+                    </div>
+                    <div class="stat-icon bg-info text-white">
+                        <i class="bi bi-people"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small text-muted">
+                    <span>@Model.ActiveUsersCount Active (@((Model.TotalUsers > 0 ? (double)Model.ActiveUsersCount / Model.TotalUsers * 100 : 0).ToString("0"))%)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold">Tour Booking Rate</span>
+                        <h4 class="fw-bold text-success mt-1 mb-0">@apptSuccessRate.ToString("0.0")%</h4>
+                    </div>
+                    <div class="stat-icon bg-warning text-dark">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="mt-3 small text-muted">
+                    <span>@Model.TotalAppointments Scheduled Tours</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Property Distribution & User Breakdown -->
+    <div class="row g-4 mb-4">
+        <!-- Property Category Distribution -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
+                <h5 class="fw-bold mb-3"><i class="bi bi-pie-chart-fill text-primary me-2"></i> Properties by Category</h5>
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var cat in Model.PropertiesByType)
+                    {
+                        var pct = Model.TotalProperties > 0 ? (double)cat.Value / Model.TotalProperties * 100 : 0;
+                        <div>
+                            <div class="d-flex justify-content-between small fw-bold mb-1">
+                                <span>@cat.Key</span>
+                                <span>@cat.Value listings (@pct.ToString("0")%)</span>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: @pct%" aria-valuenow="@pct" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <hr class="my-4" />
+
+                <!-- For Sale vs For Rent -->
+                <h6 class="fw-bold mb-3">Listing Offer Breakdown</h6>
+                <div class="row g-2 text-center">
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="badge bg-success mb-1">For Sale</span>
+                            <h4 class="fw-bold text-dark mb-0">@Model.ForSaleProperties</h4>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="badge bg-info mb-1">For Rent</span>
+                            <h4 class="fw-bold text-dark mb-0">@Model.ForRentProperties</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Role Breakdown -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
+                <h5 class="fw-bold mb-3"><i class="bi bi-person-lines-fill text-info me-2"></i> User Distribution by Role</h5>
+                <div class="row g-3 text-center mb-4">
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="badge bg-danger mb-1">Admin</span>
+                            <h4 class="fw-bold text-dark mb-0">@Model.AdminCount</h4>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="badge bg-info text-dark mb-1">Agent</span>
+                            <h4 class="fw-bold text-dark mb-0">@Model.AgentCount</h4>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="badge bg-success mb-1">Seller</span>
+                            <h4 class="fw-bold text-dark mb-0">@Model.SellerCount</h4>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-light rounded-3 border">
+                            <span class="badge bg-primary mb-1">Client</span>
+                            <h4 class="fw-bold text-dark mb-0">@Model.ClientCount</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <!-- Inquiries and Engagement -->
+                <h6 class="fw-bold mb-2">Inquiry Engagement Rate</h6>
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                    <span>Responded Inquiries (@Model.RespondedInquiries / @Model.TotalInquiries)</span>
+                    <span class="text-success">@inquiryResponseRate.ToString("0.0")% Responded</span>
+                </div>
+                <div class="progress mb-3" style="height: 12px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @inquiryResponseRate%" aria-valuenow="@inquiryResponseRate" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <!-- Appointment Status Breakdown -->
+                <h6 class="fw-bold mb-2 mt-4">Appointment Status Metrics</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-warning text-dark px-3 py-2">@Model.PendingAppointments Pending</span>
+                    <span class="badge bg-success px-3 py-2">@Model.ConfirmedAppointments Confirmed</span>
+                    <span class="badge bg-primary px-3 py-2">@Model.CompletedAppointments Completed</span>
+                    <span class="badge bg-danger px-3 py-2">@Model.CancelledAppointments Cancelled</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Rated Properties Table -->
+    @if (Model.TopRatedProperties.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-star-fill text-warning me-2"></i> Highest Rated Properties</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr class="small text-muted">
+                            <th>Property</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Average Rating</th>
+                            <th>Total Reviews</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var property in Model.TopRatedProperties)
+                        {
+                            var avgRating = property.Reviews.Any() ? property.Reviews.Average(r => r.Rating) : 0;
+                            var img = property.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl
+                                      ?? property.Images.FirstOrDefault()?.ImageUrl
+                                      ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@img" class="rounded-3" style="width: 70px; height: 50px; object-fit: cover;" alt="Property">
+                                        <div>
+                                            <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="fw-bold text-dark text-decoration-none">
+                                                @property.Title
+                                            </a>
+                                            <small class="text-muted d-block"><i class="bi bi-geo-alt"></i> @property.City, @property.State</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-secondary">@property.PropertyType</span></td>
+                                <td class="fw-bold text-primary">$@property.Price.ToString("N0")</td>
+                                <td>
+                                    <span class="star-rating">
+                                        @for (int s = 1; s <= 5; s++)
+                                        {
+                                            <i class="bi @(s <= Math.Round(avgRating) ? "bi-star-fill" : "bi-star")"></i>
+                                        }
+                                    </span>
+                                    <span class="small fw-bold ms-1">@avgRating.ToString("0.0")</span>
+                                </td>
+                                <td><span class="badge bg-light text-dark border">@property.Reviews.Count reviews</span></td>
+                                <td class="text-end">
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@property.Id" class="btn btn-outline-primary btn-sm">
+                                        View Listing
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
