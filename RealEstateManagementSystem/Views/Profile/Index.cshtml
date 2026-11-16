@@ -1,36 +1,38 @@
 @model RealEstateManagementSystem.ViewModels.ProfileViewModel
 @{
-    ViewData["Title"] = "My Profile";
+    ViewData["Title"] = "My Account Profile";
 }
 
-<div class="bg-primary text-white py-4 mb-4">
+<!-- Luxury Page Header -->
+<div class="luxury-page-header">
     <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
         <div>
-            <h1 class="h2 fw-bold mb-1"><i class="bi bi-person-gear me-2"></i> Account Settings</h1>
-            <p class="text-white-50 mb-0">Manage your profile details, contact information, and security preferences</p>
+            <span class="badge bg-white text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">Account Management</span>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-person-gear me-2"></i> Account Settings & Profile</h1>
+            <p class="text-white-50 mb-0">Manage your personal credentials, contact info, and security preferences</p>
         </div>
         <div class="mt-3 mt-md-0">
             @if (User.IsInRole("Admin"))
             {
-                <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-light text-primary fw-bold">
+                <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
                     <i class="bi bi-speedometer2 me-1"></i> Admin Dashboard
                 </a>
             }
             else if (User.IsInRole("Agent"))
             {
-                <a asp-controller="Agent" asp-action="Dashboard" class="btn btn-light text-primary fw-bold">
+                <a asp-controller="Agent" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
                     <i class="bi bi-briefcase me-1"></i> Agent Dashboard
                 </a>
             }
             else if (User.IsInRole("Seller"))
             {
-                <a asp-controller="Seller" asp-action="Dashboard" class="btn btn-light text-primary fw-bold">
+                <a asp-controller="Seller" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
                     <i class="bi bi-house-door me-1"></i> Seller Dashboard
                 </a>
             }
             else
             {
-                <a asp-controller="Client" asp-action="Dashboard" class="btn btn-light text-primary fw-bold">
+                <a asp-controller="Client" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
                     <i class="bi bi-person-workspace me-1"></i> Client Dashboard
                 </a>
             }
@@ -151,29 +153,28 @@
                     </h5>
 
                     <div class="row g-3 mb-4">
-                        <div class="col-12">
+                        <div class="col-md-4">
                             <label asp-for="CurrentPassword" class="form-label fw-bold small">Current Password</label>
-                            <input asp-for="CurrentPassword" type="password" class="form-control" placeholder="Enter current password if changing" />
+                            <input asp-for="CurrentPassword" class="form-control" placeholder="Current password" />
                             <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label asp-for="NewPassword" class="form-label fw-bold small">New Password</label>
-                            <input asp-for="NewPassword" type="password" class="form-control" placeholder="Min. 8 characters" />
+                            <input asp-for="NewPassword" class="form-control" placeholder="New password (min 6 chars)" />
                             <span asp-validation-for="NewPassword" class="text-danger small"></span>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label asp-for="ConfirmNewPassword" class="form-label fw-bold small">Confirm New Password</label>
-                            <input asp-for="ConfirmNewPassword" type="password" class="form-control" placeholder="Repeat new password" />
+                            <input asp-for="ConfirmNewPassword" class="form-control" placeholder="Confirm new password" />
                             <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                        <a asp-action="Index" class="btn btn-outline-secondary px-4">Reset</a>
-                        <button type="submit" class="btn btn-primary btn-lg fw-bold px-4">
-                            <i class="bi bi-check2-circle me-1"></i> Save Changes
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold px-4 shadow-sm">
+                            <i class="bi bi-check2-circle me-1"></i> Save Profile Changes
                         </button>
                     </div>
                 </form>

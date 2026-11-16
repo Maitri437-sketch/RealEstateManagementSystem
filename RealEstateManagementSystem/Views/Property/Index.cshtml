@@ -1,18 +1,20 @@
 @model RealEstateManagementSystem.ViewModels.PropertySearchViewModel
 @{
-    ViewData["Title"] = "Browse Properties";
+    ViewData["Title"] = "Browse Exclusive Properties";
 }
 
-<div class="bg-primary text-white py-4 mb-4">
+<!-- Luxury Page Header -->
+<div class="luxury-page-header">
     <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
         <div>
-            <h1 class="h2 fw-bold mb-1">Explore Properties</h1>
-            <p class="text-white-50 mb-0">Browse our comprehensive collection of verified homes and commercial real estate</p>
+            <span class="badge bg-white text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">Curated Portfolio</span>
+            <h1 class="h2 fw-bold mb-1">Explore Premier Properties</h1>
+            <p class="text-white-50 mb-0">Browse our handpicked collection of verified luxury homes, villas, and commercial estates</p>
         </div>
         @if (User.IsInRole("Admin") || User.IsInRole("Agent") || User.IsInRole("Seller"))
         {
             <div class="mt-3 mt-md-0">
-                <a asp-controller="Property" asp-action="Create" class="btn btn-light text-primary fw-bold px-3">
+                <a asp-controller="Property" asp-action="Create" class="btn btn-light text-primary fw-bold px-3 shadow-sm">
                     <i class="bi bi-plus-circle-fill me-1"></i> List New Property
                 </a>
             </div>
@@ -26,7 +28,7 @@
         <div class="col-lg-3">
             <div class="card border-0 shadow-sm rounded-4 p-4 sticky-lg-top" style="top: 80px; z-index: 10;">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-funnel-fill text-primary me-2"></i> Filters</h5>
+                    <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-funnel-fill text-primary me-2"></i> Filters</h5>
                     <a asp-action="Index" class="small text-decoration-none text-muted">Clear All</a>
                 </div>
 
@@ -51,11 +53,11 @@
                         <label class="form-label small fw-bold">Property Type</label>
                         <select asp-for="PropertyType" class="form-select">
                             <option value="">All Categories</option>
-                            <option value="House">House</option>
-                            <option value="Apartment">Apartment</option>
                             <option value="Villa">Luxury Villa</option>
-                            <option value="Condo">Condo</option>
-                            <option value="Commercial">Commercial</option>
+                            <option value="Apartment">Modern Apartment</option>
+                            <option value="House">Single Family House</option>
+                            <option value="Condo">City Condominium</option>
+                            <option value="Commercial">Commercial Space</option>
                         </select>
                     </div>
 
@@ -74,10 +76,10 @@
                         <label class="form-label small fw-bold">Price Range ($)</label>
                         <div class="row g-2">
                             <div class="col-6">
-                                <input type="number" asp-for="MinPrice" class="form-control form-control-sm" placeholder="Min" />
+                                <input type="number" asp-for="MinPrice" class="form-control form-control-sm" placeholder="Min Price" />
                             </div>
                             <div class="col-6">
-                                <input type="number" asp-for="MaxPrice" class="form-control form-control-sm" placeholder="Max" />
+                                <input type="number" asp-for="MaxPrice" class="form-control form-control-sm" placeholder="Max Price" />
                             </div>
                         </div>
                     </div>
@@ -87,11 +89,11 @@
                         <label class="form-label small fw-bold">Bedrooms (Min)</label>
                         <select asp-for="MinBedrooms" class="form-select form-select-sm">
                             <option value="">Any</option>
-                            <option value="1">1+ Beds</option>
-                            <option value="2">2+ Beds</option>
-                            <option value="3">3+ Beds</option>
-                            <option value="4">4+ Beds</option>
-                            <option value="5">5+ Beds</option>
+                            <option value="1">1+ Bedrooms</option>
+                            <option value="2">2+ Bedrooms</option>
+                            <option value="3">3+ Bedrooms</option>
+                            <option value="4">4+ Bedrooms</option>
+                            <option value="5">5+ Bedrooms</option>
                         </select>
                     </div>
 
@@ -100,10 +102,10 @@
                         <label class="form-label small fw-bold">Bathrooms (Min)</label>
                         <select asp-for="MinBathrooms" class="form-select form-select-sm">
                             <option value="">Any</option>
-                            <option value="1">1+ Baths</option>
-                            <option value="2">2+ Baths</option>
-                            <option value="3">3+ Baths</option>
-                            <option value="4">4+ Baths</option>
+                            <option value="1">1+ Bathrooms</option>
+                            <option value="2">2+ Bathrooms</option>
+                            <option value="3">3+ Bathrooms</option>
+                            <option value="4">4+ Bathrooms</option>
                         </select>
                     </div>
 
@@ -160,33 +162,33 @@
                         var isCompared = Model.UserComparisonPropertyIds.Contains(property.Id);
 
                         <div class="col-md-6 col-xl-4">
-                            <div class="property-card h-100 d-flex flex-column">
+                            <div class="property-card">
                                 <div class="property-image-wrapper">
-                                    <img src="@mainImage" alt="@property.Title" />
+                                    <img src="@mainImage" alt="@property.Title" loading="lazy" />
                                     <div class="property-badge-type">
-                                        <span class="badge @(property.ListingType == "Sale" ? "bg-success" : "bg-info") shadow-sm px-2 py-1">
+                                        <span class="property-badge @(property.ListingType == "Sale" ? "badge-sale" : "badge-rent")">
                                             For @property.ListingType
                                         </span>
                                         @if (property.IsFeatured)
                                         {
-                                            <span class="badge bg-warning text-dark shadow-sm px-2 py-1 ms-1">
+                                            <span class="property-badge badge-featured">
                                                 <i class="bi bi-star-fill"></i> Featured
                                             </span>
                                         }
                                     </div>
                                     <div class="property-actions-overlay">
                                         <a asp-controller="Wishlist" asp-action="Toggle" asp-route-propertyId="@property.Id" 
-                                           class="btn-action @(isWishlisted ? "active" : "")" title="Save to Wishlist">
+                                           class="btn-action-round @(isWishlisted ? "active" : "")" title="@(isWishlisted ? "Remove from Wishlist" : "Save to Wishlist")">
                                             <i class="bi @(isWishlisted ? "bi-heart-fill" : "bi-heart")"></i>
                                         </a>
                                         <a asp-controller="Comparison" asp-action="Add" asp-route-propertyId="@property.Id" 
-                                           class="btn-action @(isCompared ? "text-primary" : "")" title="Compare Property">
+                                           class="btn-action-round @(isCompared ? "compare-active" : "")" title="Compare Property">
                                             <i class="bi bi-arrow-left-right"></i>
                                         </a>
                                     </div>
                                 </div>
 
-                                <div class="p-3 d-flex flex-column flex-grow-1">
+                                <div class="p-4 d-flex flex-column flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="property-price">
                                             $@property.Price.ToString("N0")
@@ -208,10 +210,10 @@
                                         <i class="bi bi-geo-alt text-danger me-1"></i> @property.Address, @property.City, @property.State
                                     </p>
 
-                                    <div class="d-flex justify-content-between py-2 border-top border-bottom mb-3 text-muted small">
-                                        <span class="property-meta-item"><i class="bi bi-door-closed text-primary"></i> @property.Bedrooms Beds</span>
-                                        <span class="property-meta-item"><i class="bi bi-droplet text-info"></i> @property.Bathrooms Baths</span>
-                                        <span class="property-meta-item"><i class="bi bi-bounding-box text-secondary"></i> @property.AreaSqFt.ToString("N0") sqft</span>
+                                    <div class="property-meta-specs mb-3">
+                                        <span><i class="bi bi-door-closed text-primary"></i> @property.Bedrooms Beds</span>
+                                        <span><i class="bi bi-droplet text-info"></i> @property.Bathrooms Baths</span>
+                                        <span><i class="bi bi-bounding-box text-secondary"></i> @property.AreaSqFt.ToString("N0") sqft</span>
                                     </div>
 
                                     <div class="mt-auto d-flex gap-2">
@@ -244,7 +246,7 @@
                                    asp-route-maxPrice="@Model.MaxPrice"
                                    asp-route-minBedrooms="@Model.MinBedrooms"
                                    asp-route-minBathrooms="@Model.MinBathrooms"
-                                   asp-route-sortBy="@Model.SortBy">Previous</a>
+                                   asp-route-sortBy="@Model.SortBy">&laquo; Prev</a>
                             </li>
 
                             @for (int p = 1; p <= Model.TotalPages; p++)
@@ -275,7 +277,7 @@
                                    asp-route-maxPrice="@Model.MaxPrice"
                                    asp-route-minBedrooms="@Model.MinBedrooms"
                                    asp-route-minBathrooms="@Model.MinBathrooms"
-                                   asp-route-sortBy="@Model.SortBy">Next</a>
+                                   asp-route-sortBy="@Model.SortBy">Next &raquo;</a>
                             </li>
                         </ul>
                     </nav>
@@ -286,7 +288,7 @@
                 <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
                     <div class="text-muted mb-3"><i class="bi bi-search display-3"></i></div>
                     <h4 class="fw-bold">No Properties Found</h4>
-                    <p class="text-muted">We couldn't find any properties matching your current filters. Try resetting the criteria or exploring all categories.</p>
+                    <p class="text-muted">We couldn't find any properties matching your current filters. Try adjusting the price range or clearing criteria.</p>
                     <div>
                         <a asp-action="Index" class="btn btn-outline-primary fw-semibold">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset All Filters

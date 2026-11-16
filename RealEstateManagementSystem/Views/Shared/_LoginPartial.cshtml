@@ -11,15 +11,26 @@
     var roles = currentUser != null ? await UserManager.GetRolesAsync(currentUser) : new List<string>();
     var primaryRole = roles.FirstOrDefault() ?? "Member";
 
+    <li class="nav-item me-2 d-none d-sm-block">
+        <a class="nav-icon-btn" asp-controller="Wishlist" asp-action="Index" title="My Wishlist">
+            <i class="bi bi-heart"></i>
+        </a>
+    </li>
+    <li class="nav-item me-3 d-none d-sm-block">
+        <a class="nav-icon-btn" asp-controller="Comparison" asp-action="Index" title="Compare Properties">
+            <i class="bi bi-arrow-left-right"></i>
+        </a>
+    </li>
+
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle user-menu-pill d-flex align-items-center gap-2 text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             @if (!string.IsNullOrEmpty(currentUser?.ProfilePictureUrl))
             {
-                <img src="@currentUser.ProfilePictureUrl" alt="@fullName" class="rounded-circle border" width="32" height="32" style="object-fit: cover;" />
+                <img src="@currentUser.ProfilePictureUrl" alt="@fullName" class="user-avatar-circle border" />
             }
             else
             {
-                <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
+                <div class="user-avatar-circle">
                     @(string.IsNullOrEmpty(fullName) ? "U" : fullName.Substring(0, 1).ToUpper())
                 </div>
             }
