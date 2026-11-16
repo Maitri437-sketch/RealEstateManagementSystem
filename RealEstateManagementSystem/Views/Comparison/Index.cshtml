@@ -4,11 +4,15 @@
     var properties = Model.Properties;
 }
 
-<div class="bg-primary text-white py-4 mb-4">
+<!-- Luxury Page Header -->
+<div class="luxury-page-header">
     <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
         <div>
-            <h1 class="h2 fw-bold mb-1"><i class="bi bi-arrow-left-right me-2"></i> Compare Properties</h1>
-            <p class="text-white-50 mb-0">Evaluate up to four properties side-by-side to find the ideal match</p>
+            <span class="badge bg-info-subtle text-info-emphasis px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">
+                <i class="bi bi-arrow-left-right me-1"></i> Side-by-Side Analysis
+            </span>
+            <h1 class="h2 fw-bold mb-1">Compare Selected Properties</h1>
+            <p class="text-white-50 mb-0">Evaluate up to four properties side-by-side across pricing, dimensions, and specifications</p>
         </div>
         @if (properties.Any())
         {
@@ -16,10 +20,10 @@
                 <form asp-action="Clear" method="post" class="d-inline">
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn btn-outline-light btn-sm" onclick="return confirm('Clear all comparison items?');">
-                        <i class="bi bi-trash me-1"></i> Clear Comparison
+                        <i class="bi bi-trash me-1"></i> Clear All
                     </button>
                 </form>
-                <a asp-controller="Property" asp-action="Index" class="btn btn-light text-primary fw-bold btn-sm">
+                <a asp-controller="Property" asp-action="Index" class="btn btn-light text-primary fw-bold btn-sm shadow-sm">
                     <i class="bi bi-plus-lg me-1"></i> Add Another Listing
                 </a>
             </div>
@@ -35,29 +39,32 @@
                 <table class="table table-bordered align-middle text-center mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 20%;" class="text-start">Feature</th>
+                            <th style="width: 20%;" class="text-start fs-6 text-uppercase fw-bold text-muted">Feature</th>
                             @foreach (var p in properties)
                             {
                                 var img = p.Images.FirstOrDefault(i => i.IsMain)?.ImageUrl
                                           ?? p.Images.FirstOrDefault()?.ImageUrl
                                           ?? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80";
 
-                                <th style="width: calc(80% / @properties.Count);" class="position-relative">
+                                <th style="width: calc(80% / @properties.Count);" class="position-relative p-3">
                                     <form asp-action="Remove" method="post" class="position-absolute top-0 end-0 m-2">
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="propertyId" value="@p.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2 rounded-circle" title="Remove from comparison">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2 rounded-circle shadow-sm" title="Remove from comparison">
                                             &times;
                                         </button>
                                     </form>
 
-                                    <img src="@img" class="rounded-3 mb-2" style="height: 140px; width: 100%; object-fit: cover;" alt="@p.Title">
-                                    <h6 class="fw-bold mb-1">
+                                    <img src="@img" class="rounded-3 mb-2 shadow-sm" style="height: 150px; width: 100%; object-fit: cover;" alt="@p.Title">
+                                    <h6 class="fw-bold mb-1 text-truncate">
                                         <a asp-controller="Property" asp-action="Details" asp-route-id="@p.Id" class="text-dark text-decoration-none">
                                             @p.Title
                                         </a>
                                     </h6>
-                                    <div class="text-primary fw-bold fs-5 mb-1">$@p.Price.ToString("N0")</div>
+                                    <div class="property-price mb-2">$@p.Price.ToString("N0")</div>
+                                    <a asp-controller="Property" asp-action="Details" asp-route-id="@p.Id" class="btn btn-primary btn-sm w-100 fw-semibold">
+                                        View Details
+                                    </a>
                                 </th>
                             }
                         </tr>
@@ -67,7 +74,7 @@
                             <td class="text-start fw-bold text-muted bg-light">Property Type</td>
                             @foreach (var p in properties)
                             {
-                                <td><span class="badge bg-secondary">@p.PropertyType</span></td>
+                                <td><span class="badge bg-light text-dark border">@p.PropertyType</span></td>
                             }
                         </tr>
                         <tr>
@@ -85,7 +92,7 @@
                             <td class="text-start fw-bold text-muted bg-light">Price</td>
                             @foreach (var p in properties)
                             {
-                                <td class="fw-bold fs-5 text-primary">
+                                <td class="fw-bold fs-5 text-dark">
                                     $@p.Price.ToString("N0")
                                     @if (p.ListingType == "Rent")
                                     {
@@ -112,7 +119,7 @@
                             <td class="text-start fw-bold text-muted bg-light">Square Footage</td>
                             @foreach (var p in properties)
                             {
-                                <td><i class="bi bi-bounding-box text-success me-1"></i> @p.AreaSqFt.ToString("N0") sq ft</td>
+                                <td><i class="bi bi-bounding-box text-secondary me-1"></i> @p.AreaSqFt.ToString("N0") sq ft</td>
                             }
                         </tr>
                         <tr>
@@ -148,18 +155,13 @@
                             }
                         </tr>
                         <tr>
-                            <td class="text-start fw-bold text-muted bg-light">Actions</td>
+                            <td class="text-start fw-bold text-muted bg-light">Action</td>
                             @foreach (var p in properties)
                             {
                                 <td>
-                                    <div class="d-grid gap-1">
-                                        <a asp-controller="Property" asp-action="Details" asp-route-id="@p.Id" class="btn btn-primary btn-sm fw-semibold">
-                                            View Details
-                                        </a>
-                                        <a asp-controller="Appointment" asp-action="Book" asp-route-propertyId="@p.Id" class="btn btn-outline-secondary btn-sm">
-                                            Book Tour
-                                        </a>
-                                    </div>
+                                    <a asp-controller="Appointment" asp-action="Book" asp-route-propertyId="@p.Id" class="btn btn-outline-primary btn-sm fw-semibold">
+                                        <i class="bi bi-calendar2-check me-1"></i> Book Tour
+                                    </a>
                                 </td>
                             }
                         </tr>
@@ -171,12 +173,14 @@
     else
     {
         <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
-            <i class="bi bi-arrow-left-right display-3 text-muted mb-3 d-block"></i>
-            <h4 class="fw-bold">No Properties in Comparison Table</h4>
-            <p class="text-muted mb-4">You can select up to 4 properties from our catalog to compare their price, square footage, bedrooms, and amenities side-by-side.</p>
+            <div class="rounded-circle bg-info-subtle text-info d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 72px; height: 72px; font-size: 2rem;">
+                <i class="bi bi-arrow-left-right"></i>
+            </div>
+            <h4 class="fw-bold">No Properties in Comparison</h4>
+            <p class="text-muted mb-4 mx-auto" style="max-width: 500px;">Compare multiple listings side-by-side to evaluate features, square footage, and pricing. Click the compare icon on any property card to add it here.</p>
             <div>
-                <a asp-controller="Property" asp-action="Index" class="btn btn-primary fw-semibold px-4">
-                    <i class="bi bi-grid me-1"></i> Browse Properties
+                <a asp-controller="Property" asp-action="Index" class="btn btn-primary fw-semibold px-4 shadow-sm">
+                    <i class="bi bi-search me-1"></i> Browse Properties to Compare
                 </a>
             </div>
         </div>

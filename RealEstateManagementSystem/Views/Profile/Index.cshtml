@@ -1,0 +1,188 @@
+@model RealEstateManagementSystem.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "My Account Profile";
+}
+
+<!-- Luxury Page Header -->
+<div class="luxury-page-header">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        <div>
+            <span class="badge bg-white text-dark px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">Account Management</span>
+            <h1 class="h2 fw-bold mb-1"><i class="bi bi-person-gear me-2"></i> Account Settings & Profile</h1>
+            <p class="text-white-50 mb-0">Manage your personal credentials, contact info, and security preferences</p>
+        </div>
+        <div class="mt-3 mt-md-0">
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
+                    <i class="bi bi-speedometer2 me-1"></i> Admin Dashboard
+                </a>
+            }
+            else if (User.IsInRole("Agent"))
+            {
+                <a asp-controller="Agent" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
+                    <i class="bi bi-briefcase me-1"></i> Agent Dashboard
+                </a>
+            }
+            else if (User.IsInRole("Seller"))
+            {
+                <a asp-controller="Seller" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
+                    <i class="bi bi-house-door me-1"></i> Seller Dashboard
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Client" asp-action="Dashboard" class="btn btn-light text-primary fw-bold shadow-sm">
+                    <i class="bi bi-person-workspace me-1"></i> Client Dashboard
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4 justify-content-center">
+        <!-- Profile Summary Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 text-center">
+                <div class="mb-3 position-relative d-inline-block">
+                    @if (!string.IsNullOrEmpty(Model.CurrentProfilePictureUrl))
+                    {
+                        <img src="@Model.CurrentProfilePictureUrl" alt="@Model.FullName" class="rounded-circle border shadow-sm" style="width: 120px; height: 120px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center shadow-sm" style="width: 120px; height: 120px; font-size: 42px;">
+                            @(string.IsNullOrEmpty(Model.FullName) ? "U" : Model.FullName.Substring(0, 1).ToUpper())
+                        </div>
+                    }
+                </div>
+
+                <h4 class="fw-bold text-dark mb-1">@Model.FullName</h4>
+                <p class="text-muted small mb-2"><i class="bi bi-envelope"></i> @Model.Email</p>
+
+                <div class="mb-3">
+                    <span class="badge @(Model.Role switch { "Admin" => "bg-danger", "Agent" => "bg-info text-dark", "Seller" => "bg-success", _ => "bg-primary" }) px-3 py-2 fs-6">
+                        @Model.Role Account
+                    </span>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="text-start small text-muted d-flex flex-column gap-2">
+                    <div>
+                        <i class="bi bi-calendar3 me-2 text-primary"></i> Member Since:
+                        <strong class="text-dark">@Model.MemberSince.ToString("MMMM dd, yyyy")</strong>
+                    </div>
+                    <div>
+                        <i class="bi bi-telephone me-2 text-primary"></i> Phone:
+                        <strong class="text-dark">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "Not Provided" : Model.PhoneNumber)</strong>
+                    </div>
+                    <div>
+                        <i class="bi bi-geo-alt me-2 text-primary"></i> Location:
+                        <strong class="text-dark">@(string.IsNullOrEmpty(Model.Address) ? "Not Provided" : Model.Address)</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Form -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 p-md-5">
+                <h4 class="fw-bold text-dark border-bottom pb-3 mb-4"><i class="bi bi-pencil-square text-primary me-2"></i> Edit Profile Information</h4>
+
+                <form asp-action="Update" method="post" enctype="multipart/form-data" novalidate>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Email" />
+                    <input type="hidden" asp-for="Role" />
+                    <input type="hidden" asp-for="MemberSince" />
+                    <input type="hidden" asp-for="CurrentProfilePictureUrl" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Personal Info Section -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label fw-bold small">Full Name <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                            </div>
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label fw-bold small">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" class="form-control bg-light" readonly />
+                            </div>
+                            <small class="text-muted">Email cannot be changed.</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label fw-bold small">Phone Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="+1 (555) 000-0000" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Address" class="form-label fw-bold small">Physical / Mailing Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
+                                <input asp-for="Address" class="form-control" placeholder="City, State, Zip" />
+                            </div>
+                            <span asp-validation-for="Address" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="ProfilePicture" class="form-label fw-bold small">Update Profile Picture</label>
+                            <input asp-for="ProfilePicture" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                            <small class="text-muted d-block mt-1">Allowed formats: JPG, PNG, WEBP (Max 5MB). Leave blank to keep existing photo.</small>
+                            <span asp-validation-for="ProfilePicture" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Password Update Section -->
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3 mt-4">
+                        <i class="bi bi-shield-lock text-primary me-2"></i> Change Password <small class="text-muted fw-normal fs-6">(Leave blank to keep current password)</small>
+                    </h5>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label asp-for="CurrentPassword" class="form-label fw-bold small">Current Password</label>
+                            <input asp-for="CurrentPassword" class="form-control" placeholder="Current password" />
+                            <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="NewPassword" class="form-label fw-bold small">New Password</label>
+                            <input asp-for="NewPassword" class="form-control" placeholder="New password (min 6 chars)" />
+                            <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="ConfirmNewPassword" class="form-label fw-bold small">Confirm New Password</label>
+                            <input asp-for="ConfirmNewPassword" class="form-control" placeholder="Confirm new password" />
+                            <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold px-4 shadow-sm">
+                            <i class="bi bi-check2-circle me-1"></i> Save Profile Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
