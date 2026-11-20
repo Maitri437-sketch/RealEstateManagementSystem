@@ -73,7 +73,7 @@
 
                             <div class="col-12">
                                 <label asp-for="Description" class="form-label fw-bold small">Detailed Description <span class="text-danger">*</span></label>
-                                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="5" maxlength="2000" data-max-chars="2000"></textarea>
                                 <span asp-validation-for="Description" class="text-danger small"></span>
                             </div>
                         </div>
@@ -159,9 +159,10 @@
                         <!-- Upload Additional Images -->
                         <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">5. Upload More Photos</h5>
                         <div class="mb-4">
-                            <input asp-for="Images" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,.webp" />
-                            <small class="text-muted d-block mt-1">Select one or more new photos to append to this listing.</small>
+                            <input asp-for="Images" id="Images" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                            <small class="text-muted d-block mt-1">Select one or more new photos to append to this listing (max 10MB each).</small>
                             <span asp-validation-for="Images" class="text-danger small"></span>
+                            <div class="image-preview-wrapper d-none"></div>
                         </div>
 
                         <!-- Admin / Status Controls -->

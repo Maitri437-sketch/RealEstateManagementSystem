@@ -77,7 +77,7 @@
                         <!-- Password -->
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input asp-for="Password" class="form-control" placeholder="Password" />
+                                <input asp-for="Password" id="Password" class="form-control" placeholder="Password" />
                                 <label asp-for="Password"><i class="bi bi-lock me-1"></i> Password</label>
                                 <span asp-validation-for="Password" class="text-danger small"></span>
                             </div>
@@ -85,8 +85,8 @@
                         <!-- Confirm Password -->
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
-                                <label asp-for="ConfirmPassword"><i class="bi bi-shield-lock me-1"></i> Confirm</label>
+                                <input asp-for="ConfirmPassword" id="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                                <label asp-for="ConfirmPassword"><i class="bi bi-shield-lock me-1"></i> Confirm Password</label>
                                 <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
                             </div>
                         </div>
