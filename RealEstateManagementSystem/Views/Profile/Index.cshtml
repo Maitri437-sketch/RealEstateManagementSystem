@@ -141,9 +141,10 @@
 
                         <div class="col-12">
                             <label asp-for="ProfilePicture" class="form-label fw-bold small">Update Profile Picture</label>
-                            <input asp-for="ProfilePicture" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                            <input asp-for="ProfilePicture" id="ProfilePicture" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
                             <small class="text-muted d-block mt-1">Allowed formats: JPG, PNG, WEBP (Max 5MB). Leave blank to keep existing photo.</small>
                             <span asp-validation-for="ProfilePicture" class="text-danger small"></span>
+                            <div class="image-preview-wrapper d-none"></div>
                         </div>
                     </div>
 
@@ -161,13 +162,13 @@
 
                         <div class="col-md-4">
                             <label asp-for="NewPassword" class="form-label fw-bold small">New Password</label>
-                            <input asp-for="NewPassword" class="form-control" placeholder="New password (min 6 chars)" />
+                            <input asp-for="NewPassword" id="NewPassword" class="form-control" placeholder="New password (min 6 chars)" />
                             <span asp-validation-for="NewPassword" class="text-danger small"></span>
                         </div>
 
                         <div class="col-md-4">
                             <label asp-for="ConfirmNewPassword" class="form-label fw-bold small">Confirm New Password</label>
-                            <input asp-for="ConfirmNewPassword" class="form-control" placeholder="Confirm new password" />
+                            <input asp-for="ConfirmNewPassword" id="ConfirmNewPassword" class="form-control" placeholder="Confirm new password" />
                             <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
                         </div>
                     </div>

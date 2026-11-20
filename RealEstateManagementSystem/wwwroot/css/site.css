@@ -71,6 +71,22 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Custom Luxury Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
 h1, h2, h3, h4, .font-heading {
     font-family: var(--font-heading);
     letter-spacing: -0.02em;
@@ -542,7 +558,7 @@ div.bg-primary.text-white.py-4 p {
 }
 
 /* ==========================================================================
-   Form Styling & Validations
+   Form Styling & Advanced Validations
    ========================================================================== */
 
 .form-control, .form-select {
@@ -563,12 +579,22 @@ div.bg-primary.text-white.py-4 p {
     color: var(--brand-blue);
 }
 
-.input-validation-error, .is-invalid {
+/* Invalid state */
+.input-validation-error, .form-control.is-invalid, .form-select.is-invalid {
     border-color: #ef4444 !important;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23ef4444'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23ef4444' stroke='none'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right calc(0.375em + 0.1875rem) center;
-    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23ef4444'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23ef4444' stroke='none'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right calc(0.375em + 0.1875rem) center !important;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
+}
+
+/* Valid state */
+.form-control.is-valid, .form-select.is-valid {
+    border-color: var(--brand-emerald) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23059669'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2.5 6.5l2.5 2.5 5-5'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right calc(0.375em + 0.1875rem) center !important;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
 }
 
 .field-validation-error {
@@ -583,6 +609,200 @@ div.bg-primary.text-white.py-4 p {
     list-style: none;
     padding-left: 0;
     margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Password Strength Meter
+   ========================================================================== */
+
+.password-strength-container {
+    margin-top: 6px;
+    margin-bottom: 12px;
+}
+
+.password-strength-meter {
+    height: 5px;
+    background-color: #e2e8f0;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    position: relative;
+}
+
+.password-strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 300ms ease, background-color 300ms ease;
+    border-radius: var(--radius-pill);
+}
+
+.strength-weak {
+    width: 25%;
+    background-color: #ef4444 !important;
+}
+
+.strength-fair {
+    width: 50%;
+    background-color: #f59e0b !important;
+}
+
+.strength-good {
+    width: 75%;
+    background-color: var(--brand-blue) !important;
+}
+
+.strength-strong {
+    width: 100%;
+    background-color: var(--brand-emerald) !important;
+}
+
+.password-feedback-text {
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-top: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ==========================================================================
+   Interactive Live Image Previewer
+   ========================================================================== */
+
+.image-preview-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+    min-height: 80px;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    background-color: var(--surface-bg);
+    border: 1.5px dashed var(--surface-border);
+    align-items: center;
+}
+
+.image-preview-item {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 2px solid #ffffff;
+    box-shadow: var(--shadow-subtle);
+    animation: fadeInScale 250ms ease-out;
+}
+
+.image-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-preview-badge {
+    position: absolute;
+    bottom: 3px;
+    left: 3px;
+    background: rgba(15, 23, 42, 0.8);
+    color: #ffffff;
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ==========================================================================
+   Quick-Question Chips & Character Counters
+   ========================================================================== */
+
+.quick-chips-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.quick-chip {
+    background: #ffffff;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-pill);
+    padding: 4px 14px;
+    font-size: 0.825rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.quick-chip:hover {
+    border-color: var(--brand-blue);
+    background: var(--brand-blue-soft);
+    color: var(--brand-blue);
+    transform: translateY(-1px);
+}
+
+.quick-chip.active {
+    background: var(--brand-blue);
+    color: #ffffff;
+    border-color: var(--brand-blue);
+}
+
+.char-counter {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 4px;
+}
+
+/* ==========================================================================
+   Floating Back-To-Top Button
+   ========================================================================== */
+
+.back-to-top-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--brand-navy);
+    color: #ffffff;
+    border: none;
+    box-shadow: var(--shadow-float);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    z-index: 999;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: all var(--transition-base);
+}
+
+.back-to-top-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top-btn:hover {
+    background: var(--brand-blue);
+    color: #ffffff;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(29, 78, 216, 0.35);
 }
 
 /* ==========================================================================

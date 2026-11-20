@@ -71,7 +71,7 @@
 
                             <div class="col-12">
                                 <label asp-for="Description" class="form-label fw-bold small">Detailed Description <span class="text-danger">*</span></label>
-                                <textarea asp-for="Description" class="form-control" rows="5" placeholder="Highlight key selling points, neighborhood amenities, interior finishes, parking, security, etc..."></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="5" maxlength="2000" data-max-chars="2000" placeholder="Highlight key selling points, neighborhood amenities, interior finishes, parking, security, etc..."></textarea>
                                 <span asp-validation-for="Description" class="text-danger small"></span>
                             </div>
                         </div>
@@ -87,35 +87,35 @@
 
                             <div class="col-md-4">
                                 <label asp-for="City" class="form-label fw-bold small">City <span class="text-danger">*</span></label>
-                                <input asp-for="City" class="form-control" placeholder="e.g. Springfield" />
+                                <input asp-for="City" class="form-control" placeholder="e.g. Miami" />
                                 <span asp-validation-for="City" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-4">
                                 <label asp-for="State" class="form-label fw-bold small">State / Province <span class="text-danger">*</span></label>
-                                <input asp-for="State" class="form-control" placeholder="e.g. OR" />
+                                <input asp-for="State" class="form-control" placeholder="e.g. Florida" />
                                 <span asp-validation-for="State" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-4">
                                 <label asp-for="ZipCode" class="form-label fw-bold small">Zip / Postal Code <span class="text-danger">*</span></label>
-                                <input asp-for="ZipCode" class="form-control" placeholder="e.g. 97477" />
+                                <input asp-for="ZipCode" class="form-control" placeholder="e.g. 33101" />
                                 <span asp-validation-for="ZipCode" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <!-- Amenities & Dimensions -->
-                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">3. Specifications & Architecture</h5>
+                        <!-- Specifications Section -->
+                        <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">3. Property Specifications</h5>
                         <div class="row g-3 mb-4">
                             <div class="col-md-4">
                                 <label asp-for="Bedrooms" class="form-label fw-bold small">Bedrooms</label>
-                                <input asp-for="Bedrooms" type="number" class="form-control" />
+                                <input asp-for="Bedrooms" type="number" class="form-control" placeholder="e.g. 3" />
                                 <span asp-validation-for="Bedrooms" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-4">
                                 <label asp-for="Bathrooms" class="form-label fw-bold small">Bathrooms</label>
-                                <input asp-for="Bathrooms" type="number" class="form-control" />
+                                <input asp-for="Bathrooms" type="number" class="form-control" placeholder="e.g. 2" />
                                 <span asp-validation-for="Bathrooms" class="text-danger small"></span>
                             </div>
 
@@ -126,13 +126,15 @@
                             </div>
                         </div>
 
-                        <!-- Image Uploads -->
+                        <!-- Image Uploads with Live Preview -->
                         <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">4. Property Photos</h5>
                         <div class="mb-4">
                             <label asp-for="Images" class="form-label fw-bold small">Upload Photos (Supported: .jpg, .png, .webp &ndash; max 10MB each)</label>
-                            <input asp-for="Images" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                            <input asp-for="Images" id="Images" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,.webp" />
                             <small class="text-muted d-block mt-1">Select one or multiple images. The first image uploaded will serve as the primary listing photo.</small>
                             <span asp-validation-for="Images" class="text-danger small"></span>
+                            <!-- Live Thumbnail Previewer Container -->
+                            <div class="image-preview-wrapper d-none"></div>
                         </div>
 
                         <!-- Admin Only Settings -->
@@ -157,8 +159,8 @@
 
                         <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
                             <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
-                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-4">
-                                <i class="bi bi-check2-circle me-1"></i> Submit Property
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-4 shadow-sm">
+                                <i class="bi bi-cloud-upload me-1"></i> Submit Property
                             </button>
                         </div>
                     </form>
