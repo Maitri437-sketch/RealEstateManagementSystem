@@ -149,6 +149,15 @@
                 </div>
             </div>
 
+            <!-- Quick Price Filter Chips -->
+            <div class="d-flex align-items-center gap-2 mb-4 flex-wrap">
+                <span class="small fw-bold text-muted me-1"><i class="bi bi-tag-fill text-primary"></i> Quick Price Tiers:</span>
+                <button type="button" class="filter-chip-btn @(Model.MaxPrice == 500000 && !Model.MinPrice.HasValue ? "active" : "")" data-min="" data-max="500000">Under $500K</button>
+                <button type="button" class="filter-chip-btn @(Model.MinPrice == 500000 && Model.MaxPrice == 1000000 ? "active" : "")" data-min="500000" data-max="1000000">$500K &ndash; $1M</button>
+                <button type="button" class="filter-chip-btn @(Model.MinPrice == 1000000 && Model.MaxPrice == 2500000 ? "active" : "")" data-min="1000000" data-max="2500000">$1M &ndash; $2.5M</button>
+                <button type="button" class="filter-chip-btn @(Model.MinPrice == 2500000 && !Model.MaxPrice.HasValue ? "active" : "")" data-min="2500000" data-max="">$2.5M+</button>
+            </div>
+
             <!-- Property Cards Grid -->
             @if (Model.Properties != null && Model.Properties.Any())
             {
