@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function () {
     initCharCounters();
     initBackToTop();
     initFormSubmitProtection();
+    initMortgageCalculator();
+    initShareAndPrint();
+    initQuickFilterChips();
 });
 
 /* ==========================================================================
@@ -396,3 +399,128 @@ function initFormSubmitProtection() {
         });
     });
 }
+
+/* ==========================================================================
+   10. Interactive Mortgage & Loan Payment Calculator
+   ========================================================================== */
+function initMortgageCalculator() {
+    const calc = document.getElementById('mortgageCalculator');
+    if (!calc) return;
+
+    const priceInput = document.getElementById('calcHomePrice');
+    const downPctInput = document.getElementById('calcDownPaymentPct');
+    const downAmtInput = document.getElementById('calcDownPaymentAmt');
+    const termInput = document.getElementById('calcLoanTerm');
+    const rateInput = document.getElementById('calcInterestRate');
+
+    const totalDisplay = document.getElementById('calcTotalMonthly');
+    const piDisplay = document.getElementById('calcPrincipalInterest');
+    const taxDisplay = document.getElementById('calcPropertyTax');
+    const insDisplay = document.getElementById('calcHomeInsurance');
+
+    const barPi = document.getElementById('barPrincipal');
+    const barTax = document.getElementById('barTax');
+    const barIns = document.getElementById('barInsurance');
+
+    if (!priceInput || !rateInput) return;
+
+    function calculate() {
+        const homePrice = parseFloat(priceInput.value) || 0;
+        const downPct = parseFloat(downPctInput ? downPctInput.value : 20) || 0;
+        const downAmt = (homePrice * downPct) / 100;
+        if (downAmtInput) downAmtInput.value = Math.round(downAmt);
+
+        const principal = Math.max(0, homePrice - downAmt);
+        const years = parseInt(termInput ? termInput.value : 30) || 30;
+        const annualRate = (parseFloat(rateInput.value) || 6.5) / 100;
+        const monthlyRate = annualRate / 12;
+        const numPayments = years * 12;
+
+        let monthlyPI = 0;
+        if (monthlyRate > 0 && numPayments > 0 && principal > 0) {
+            monthlyPI = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+        }
+
+        const monthlyTax = (homePrice * 0.012) / 12; // ~1.2% annual tax
+        const monthlyIns = (homePrice * 0.004) / 12; // ~0.4% annual insurance
+        const totalMonthly = monthlyPI + monthlyTax + monthlyIns;
+
+        if (totalDisplay) totalDisplay.textContent = '$' + Math.round(totalMonthly).toLocaleString();
+        if (piDisplay) piDisplay.textContent = '$' + Math.round(monthlyPI).toLocaleString();
+        if (taxDisplay) taxDisplay.textContent = '$' + Math.round(monthlyTax).toLocaleString();
+        if (insDisplay) insDisplay.textContent = '$' + Math.round(monthlyIns).toLocaleString();
+
+        if (totalMonthly > 0 && barPi && barTax && barIns) {
+            barPi.style.width = ((monthlyPI / totalMonthly) * 100) + '%';
+            barTax.style.width = ((monthlyTax / totalMonthly) * 100) + '%';
+            barIns.style.width = ((monthlyIns / totalMonthly) * 100) + '%';
+        }
+    }
+
+    [priceInput, downPctInput, termInput, rateInput].forEach(elem => {
+        if (elem) elem.addEventListener('input', calculate);
+    });
+
+    calculate();
+}
+
+/* ==========================================================================
+   11. Social Share & Print Brochure
+   ========================================================================== */
+function initShareAndPrint() {
+    const shareBtns = document.querySelectorAll('.btn-share-listing');
+    shareBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="bi bi-check2 text-success me-1"></i> Link Copied!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                    }, 2500);
+                }).catch(() => {
+                    prompt('Copy this listing URL:', window.location.href);
+                });
+            } else {
+                prompt('Copy this listing URL:', window.location.href);
+            }
+        });
+    });
+
+    const printBtns = document.querySelectorAll('.btn-print-brochure');
+    printBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            window.print();
+        });
+    });
+}
+
+/* ==========================================================================
+   12. Quick Price Filter Chips on Search
+   ========================================================================== */
+function initQuickFilterChips() {
+    const chips = document.querySelectorAll('.filter-chip-btn');
+    const minInput = document.querySelector('input[name="MinPrice"], #MinPrice');
+    const maxInput = document.querySelector('input[name="MaxPrice"], #MaxPrice');
+    const filterForm = document.querySelector('form[asp-action="Index"], form[action*="Property"]');
+
+    if (!chips.length || !minInput || !maxInput) return;
+
+    chips.forEach(chip => {
+        chip.addEventListener('click', function () {
+            const min = chip.getAttribute('data-min') || '';
+            const max = chip.getAttribute('data-max') || '';
+
+            minInput.value = min;
+            maxInput.value = max;
+
+            chips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            if (filterForm) {
+                filterForm.submit();
+            }
+        });
+    });
+}
+

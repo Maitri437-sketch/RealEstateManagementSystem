@@ -37,6 +37,12 @@
                class="btn btn-outline-info btn-sm @(ViewBag.IsCompared == true ? "active" : "")">
                 <i class="bi bi-arrow-left-right me-1"></i> Compare
             </a>
+            <button type="button" class="btn btn-outline-secondary btn-sm btn-share-listing" title="Share property link">
+                <i class="bi bi-share me-1"></i> Share
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm btn-print-brochure" title="Print property brochure">
+                <i class="bi bi-printer me-1"></i> Print
+            </button>
 
             @if (canEdit)
             {
@@ -173,6 +179,112 @@
                 <p class="text-secondary mb-0" style="white-space: pre-line; line-height: 1.8;">
                     @Model.Description
                 </p>
+            </div>
+
+            <!-- Luxury Amenities & Architectural Features -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                <h4 class="fw-bold mb-3 text-dark">Luxury Amenities & Highlights</h4>
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-water"></i>
+                            <span>Private Pool</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-snow"></i>
+                            <span>Central Climate</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-shield-check"></i>
+                            <span>24/7 Security</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-car-front-fill"></i>
+                            <span>Private Garage</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-battery-charging"></i>
+                            <span>EV Fast Charging</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-tree"></i>
+                            <span>Designer Garden</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-wifi"></i>
+                            <span>Smart Home AI</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="amenity-badge-card">
+                            <i class="bi bi-eye"></i>
+                            <span>Panoramic View</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Mortgage & Payment Estimator -->
+            <div class="mortgage-calculator-card mb-4" id="mortgageCalculator">
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <div>
+                        <h4 class="fw-bold mb-1 text-dark"><i class="bi bi-calculator text-primary me-2"></i> Mortgage & Payment Estimator</h4>
+                        <p class="text-muted small mb-0">Estimate your monthly payment including principal, interest, taxes, and insurance</p>
+                    </div>
+                    <div class="text-end">
+                        <span class="small text-muted d-block">Estimated Payment</span>
+                        <h3 class="fw-bold text-primary mb-0" id="calcTotalMonthly">$0</h3>
+                        <small class="text-muted">/ month</small>
+                    </div>
+                </div>
+
+                <!-- Breakdown Visual Progress Bar -->
+                <div class="mortgage-breakdown-bar">
+                    <div class="breakdown-principal" id="barPrincipal" style="width: 75%;" title="Principal & Interest"></div>
+                    <div class="breakdown-tax" id="barTax" style="width: 15%;" title="Property Tax"></div>
+                    <div class="breakdown-insurance" id="barInsurance" style="width: 10%;" title="Home Insurance"></div>
+                </div>
+
+                <div class="d-flex justify-content-between text-muted small mb-4 flex-wrap gap-2">
+                    <span><i class="bi bi-circle-fill text-primary me-1"></i> Principal & Interest: <strong class="text-dark" id="calcPrincipalInterest">$0</strong></span>
+                    <span><i class="bi bi-circle-fill text-success me-1"></i> Property Tax: <strong class="text-dark" id="calcPropertyTax">$0</strong></span>
+                    <span><i class="bi bi-circle-fill text-warning me-1"></i> Home Insurance: <strong class="text-dark" id="calcHomeInsurance">$0</strong></span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold">Home Price ($)</label>
+                        <input type="number" id="calcHomePrice" class="form-control form-control-sm" value="@Math.Round(Model.Price)" />
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold">Down Payment (%)</label>
+                        <input type="number" id="calcDownPaymentPct" class="form-control form-control-sm" value="20" min="0" max="100" />
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold">Loan Term</label>
+                        <select id="calcLoanTerm" class="form-select form-select-sm">
+                            <option value="30" selected>30 Years Fixed</option>
+                            <option value="15">15 Years Fixed</option>
+                            <option value="20">20 Years Fixed</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold">Interest Rate (%)</label>
+                        <input type="number" id="calcInterestRate" class="form-control form-control-sm" step="0.1" value="6.5" />
+                    </div>
+                </div>
             </div>
 
             <!-- Client Reviews Section -->
